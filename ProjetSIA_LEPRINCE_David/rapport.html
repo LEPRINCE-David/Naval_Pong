@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html>
+<title>Rapport Pong3D</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Raleway">
+<style>
+body,h1,h2,h3,h4,h5 {font-family: "Raleway", sans-serif}
+.italic {
+  font-style: italic;
+  font-size: 13px;
+}
+img {
+	border-width:1px;
+	border-style:solid;
+	border-color:black;
+}
+</style>
+<body class="w3-light-grey">
+
+<div class="w3-content" style="max-width:1400px">
+
+<!-- Header -->
+<header class="w3-container w3-center w3-padding-32"> 
+  <h1><b>NavalPong</b></h1>
+  <p>Pong3D réalisé par <span class="w3-tag">Leprince David</span></p>
+</header>
+
+<div class="w3-row">
+
+<div class="w3-col">
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Introduction</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>La variante 3D (visuelle et conceptuelle) du jeu PONG que j’ai développé se base sur l’association du jeu PONG classique (plateau de jeu en long avec balle et raquettes pour 2 joueurs) et la bataille navale (positionnement et suppression de bateaux, univers spécifique à la guerre maritime).</p>
+      <p>Contrairement au PONG classique, j’ai pris la décision d’introduire le jeu avec une page d’accueil, sous la forme d’un prologue justifiant mon choix de jeu, le NavalPong (Bataille Navale + PONG).</p>
+      <center><img src="rapport/images/Figure_1.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 1 : L’introduction permet aussi de cacher le plateau de jeu qui se charge en arrière-plan</p>
+      </center>
+      <p>Dès cette page d’accueil, et une fois le jeu chargé en arrière-plan (j’ai fixé une contrainte de 30 fps à dépasser qui débloquent alors les boutons permettant de choisir son mode de jeu), l’utilisateur est invité à jouer au NavalPong ou bien reprendre ses activités en cours, dont l’accès au PONG classique.</p>
+      <center><img src="rapport/images/Figure_2.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 2 : Redirection sur une page html après avoir cliqué sur « Refuser et retourner jouer au vrai Pong »</p>
+      </center>
+      <p>Depuis la page dite PONG Classique, le joueur peut déplacer la raquette de gauche avec « a » et « q », et la raquette de droite avec « p » et « m ». Il n’y a pas d’intelligence artificielle dans ce mode de jeu qui se destine à une vocation multi-joueurs. Le joueur peut retourner à tout moment sur la page d’origine (pong3D.html) en cliquant sur le bouton situé en haut.</p>
+      <p>Une fois le bouton « Accepter et rejoindre le NavalPong » pressé, nous découvrons le plateau de jeu en basse qualité (point précisé dans les chapitres suivants).</p>
+    </div>
+  </div>
+  <hr>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Déroulement du jeu</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>Le jeu est basé sur l’affrontement d’une « raquette » contrôlée par un joueur et d’une « raquette » contrôlée par une intelligence artificielle. Ces raquettes sont ici représentées par des hélicoptères, et la zone d’impact est en cercle contrairement au PONG classique qui a une surface rectangulaire.</p>
+      <center><img src="rapport/images/Figure_3.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 3 : Le modèle de l’hélicoptère n’interagit pas avec la balle, seul le cercle situé à sa base entre en contact avec la balle</p>
+      </center>
+      <p>Par choix scénaristique, la balle est envoyée depuis un bateau pirate ou sprite de drapeau pirate (voir la partie Graphisme) situé à gauche du plateau de jeu.</p>
+      <p>Au début de la partie et de chaque manche, la balle part en direction de la base du joueur, mais attention à bien se placer avant sous peine de la rater ! Après chaque échange, la balle part en direction de la base du perdant.</p>
+      <center><img src="rapport/images/Figure_4.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 4 : La balle (représentée sous forme de boulet de canon) part en direction du joueur</p>
+      </center>
+      <p>Les déplacements de la balle sont encadrés par les limites du plateau. Pas de détection de collision ici mais seulement une inversion de la direction lorsque la balle atteint l’un des côtés.</p>
+      <p>Les rebonds sur la raquette du joueur ont nécessité quant à eux l’utilisation du ray casting, c'est-à-dire une gestion à proprement parler des collisions entre 2 objets. Je ne décrirai pas ici en détail la fonction permettant de gérer le résultat d’une touche de balle, mais le code a été construit afin de bien respecter une cohérence dans le renvoi de la balle. Ainsi la direction de la balle renvoyée est calculée en fonction de sa position sur le cercle, et sa vitesse en fonction de sa distance par rapport à ce cercle (qui peut changer via un joker par exemple).</p>
+      <center><img src="rapport/images/Figure_5.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 5 : Ici l’hélicoptère de gauche frappera moins fort que l’hélicoptère de droite</p>
+      </center>
+      <p>Concernant le bouclier situé derrière la raquette et mon choix de variante de Pong, j’ai préféré mettre de coté l’idée de construire un bouclier, puisque celui-ci a été remplacé par les différents bateaux sur le terrain (qui se comportent de la même façon à l’exception faite qu’ils peuvent théoriquement subir plusieurs touches de balles avant de « couler »).</p>
+      <center><img src="rapport/images/Figure_6.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 6 : Les bateaux sont disposés manuellement sur le plateau de jeu via une fonction prenant en paramètres la taille du bateau, sa case initiale, et son sens</p>
+      </center>
+      <p>Les échanges gagnants des joueurs sont modélisés par des bateaux en papier situés sur la droite du plateau, ou plus classiquement par les chiffres 1 et 2 (voir partie Graphisme). Ils se réinitialisent après chaque début de manche/niveau, leur limite étant fixée à 2.</p>
+      <center><img src="rapport/images/Figure_7.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 7 : En fonction de la qualité souhaitée, 2 représentations possibles</p>
+      </center>
+      <p>Concernant le Game Over, il est annoncé par un son et un texte.  Mais plutôt que de permettre à l’utilisateur de redémarrer une partie, le jeu charge une nouvelle page : la page du PONG Classique (vu précédemment). C’est la guerre, il faut du temps pour récupérer d’une défaite. Une fois sur cette page, le bouton de retour vers le pong3D est toujours là et n’attend que le joueur souhaitant prendre sa revanche et arriver à la fin du jeu.</p>
+      <center><img src="rapport/images/Figure_8.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 8 : Ici le joueur a perdu son 3eme échange et c’est le GAME OVER</p>
+      </center>
+      <p>Il y a 3 niveaux différents, introduits par des messages de début de niveaux. Il n’y a cependant pas de description des ajouts/modifications de ce nouveau niveau, j’ai considéré que c’est au joueur de les découvrir.</p>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Technologies Logicielles</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>Le jeu a été testé et tourne sur Chrome et Firefox.</p>
+      <p>La majeure partie du contenu est basé sur du html et la bibliothèque Three.js.</p>
+      <p>Pour l’ajout de bibliothèques auxiliaires :</p>
+      <ul>
+      	<li>dat.gui.minjs : console administrateur pour les tests</li>
+      	<li>stats.js : surtout utilisé pendant les tests pour vérifier les chutes de framerate</li>
+      	<li>THREEx.FullScreen.js : utilisé pour permettre le rendu en plein écran</li>
+      	<li>water-material.js : nécessaire au rendu de l’eau</li>
+      	<li>mirror.js : nécessaire au rendu de l’eau</li>
+      	<li>window.js : nécessaire au rendu de l’eau</li>
+      	<li>OrbitControls.js : utilisé pour les tests puis abandonné car non nécessaire au projet</li>
+      	<li>howler.js : bibliothèque utilisée pour la gestion des musiques/sons</li>
+      	<li>EffectComposer.js : utilisé pour l’effet de post-processing</li>
+      	<li>CopyShader.js : utilisé pour l’effet de post-processing</li>
+      	<li>RenderPass.js : utilisé pour l’effet de post-processing</li>
+      	<li>ShaderPass.js : utilisé pour l’effet de post-processing</li>
+      	<li>HorizontalTiltShiftShader.js : utilisé pour l’effet de post-processing</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Fenêtre graphique 3D</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>La fenêtre est adaptée aux bords de l’écran. Il est toutefois nécessaire de dérouler la page d’accueil pour accéder aux boutons de lancement du jeu.</p>
+      <p>La touche « f » projette le jeu en plein écran. Il y a cependant un bug concernant les textes faits avec des "div" de la partie html : leur position absolue semble revenir par défaut avec cet affichage. Le bug se corrige en cliquant sur n’importe quel bouton de la page.</p>
+      <p>La touche « p » met le jeu en pause et procède à une capture d’écran qui s’ouvre dans un nouvel onglet (testé sous Chrome). Revenir sur le jeu continue la partie.</p>
+      <center><img src="rapport/images/Figure_9.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 9 : La capture d’écran ouvre un nouvel onglet tandis que le jeu est stoppé en attente du retour du joueur</p>
+      </center>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Architecture logicielle</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>L'achitecture logicielle est bien respectée.</p>
+      <p>Cependant je reconnais certaines faiblesses en termes de rigueur de codage, notamment concernant le CSS et le code qui peut s'avérer très fastidieux à relire. J'ai par ailleurs sous-estimé le temps nécessaire à la réalisation du projet.</p>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Graphisme</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>Avant toute chose, il apparaît nécessaire d’introduire la possibilité de changer la qualité graphique du jeu.</p>
+      <p>Afin de permettre la meilleure expérience de jeu possible, l’objectif était d’atteindre les 60 fps constants, difficilement atteignables avec l’ajout des différents modèles. J’ai du alors imaginer la possibilité de jouer sans se soucier de la qualité graphique du jeu.</p>
+      <p>En appuyant sur « y » le joueur peut à tout moment changer la qualité graphique du jeu, et passer d’un plateau chargé de bateaux et autre détails, à une interface sobre affichant seulement le nécessaire, c'est-à-dire raquettes/balles/score, afin de gagner en fluidité.</p>
+      <p>Le jeu se déroule au beau milieu de nulle part, sur un océan. Au loin des nuages entourent la scène, éclairée par une lumière chaude. La chaleur matinale annonce mal les affrontements qui se tiennent au centre du plateau.</p>
+      <center><img src="rapport/images/Figure_10.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 10 : Beau temps pour faire la guerre</p>
+      </center>
+      <p>L’adversaire est représenté par 3 modèles différents (possédant leur propre intelligence artificielle) ou bien un sprite d’hélicoptère pour ceux qui auront choisi la qualité graphique la plus basse du jeu.</p>
+      <center><img src="rapport/images/Figure_11.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 11 : Il faudra jouer pour découvrir les derniers adversaires</p>
+      </center>
+      <p>En qualité graphique élevée, la scène est ceinturée par 2 imposants navires qui représentent les bases du joueur et de l’ennemi. De plus, le bateau pirate et les bateaux placés au début du jeu augmentent l’effet d’immersion. Si vous vous concentrez bien vous apercevrez même un requin nageant sans pression au milieu des échanges de balle. Et attention à la mouette qui suit le curseur de votre souris !</p>
+      <center><img src="rapport/images/Figure_12.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 12 : Je n’ai pas parlé des bouées ?</p>
+      </center>
+      <p>Lorsqu’un point est marqué pour l’un des deux camps, la scène se brouille par la force de l’impact avant de revenir à son état initial. C’est le seul effet de post-processing que j’ai jugé utile d’ajouter, de plus j’ai décidé de ne pas le rendre désactivable au vue de son faible impact lors de la partie.</p>
+      <center><img src="rapport/images/Figure_13.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 13 : L’effet de flou en action</p>
+      </center>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Dialogues avec l’utilisateur</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>Quand un point est marqué, un son retentit en plus de l’effet de post-processing.</p>
+      <p>C’est lors de la transition d’un niveau à l’autre que le joueur reçoit des messages, simulant les ordres et étonnements de son supérieur.</p>
+      <center><img src="rapport/images/Figure_14.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 14 : Le jeu essaie d’informer le joueur de ce qu’il se passe</p>
+      </center>
+      <p>La touche « h » permet d’avoir une liste complète des raccourcis de touches, ainsi qu’un rappel de l’objectif du jeu. L’activation de cette touche ouvre une fenêtre d’alerte qui met le jeu en pause, laissant le temps au joueur de lire sans risquer de perdre sa partie.</p>
+      <center><img src="rapport/images/Figure_15.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 15 : On retrouve ici toutes les informations nécessaires pour pouvoir jouer</p>
+      </center>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Points de vue caméra</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>Le jeu comporte 4 positions de caméras distinctes les unes aux autres.</p>
+      <p>La première est visualisée en appuyant sur « 0 ». C’est la position de caméra par défaut, avec vue sur tout le terrain.</p>
+      <p>L’autre position importante est la vue du dessus, à laquelle on accède en appuyant sur « 1 ».</p>
+      <p>Les deux autres caméras (« 3 » et « 4 ») sont peu pratiques pour jouer et viennent se positionner sur la raquette (hélicoptère) du joueur ainsi que sur la mouette qui se déplace dans le ciel. Elles permettent un point de vue original.</p>
+      <center><img src="rapport/images/Figure_16.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 16 : Les 4 points de vue possibles (en utilisant l’une ou l’autre qualité graphique)</p>
+      </center>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Gestion des collisions</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>La gestion des collisions à été légèrement compliquée à mettre en place à cause de mon choix d’une raquette arrondie et non rectangulaire. Ayant déjà abordé le sujet dans la première partie, je rappelle ici ce qui a déjà été décrit.</p>
+      <p>Les déplacements de la balle sont encadrés par les limites du plateau. Pas de détection de collision mais seulement une inversion de la direction lorsque l’un des côtés est atteint. Les rebonds sur la raquette du joueur ont nécessité l’utilisation du ray casting, c'est-à-dire une gestion stricte des collisions entre 2 objets. Le code de la fonction permettant de gérer le résultat d’une touche de balle a été construit afin de bien respecter une cohérence dans le renvoi de la balle. Ainsi la direction de la balle renvoyée est calculée en fonction de sa position sur le cercle, et sa vitesse en fonction de sa distance par rapport à ce cercle (qui peut changer via un joker par exemple).</p>
+      <p>Le ray-casting est aussi utile pour la collision de la balle avec les jokers évoluant sur le plateau (voir partie sur les Jokers), ainsi qu’avec les bateaux déjà disposés sur le plateau.</p>
+      <p>Petite précision concernant les bateaux, la balle ne vient pas en contact avec eux directement, mais avec un mur invisible entourant les bateaux, afin de se rapprocher le plus possible d’un ensemble de cases de jeu. De plus, ces murs sont répartis en 2 groupes : murs horizontaux et murs verticaux, afin de gérer au mieux le changement de trajectoire de la balle qui viendrait percuter ces murs.</p>
+      <center><img src="rapport/images/Figure_17.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 17 : Les cases clairement visibles grâce à des surfaces planes</p>
+      </center>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Dynamique</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>La vitesse de la balle augmente au cours du temps dans le même échange mais se réinitialise une fois l’échange gagné. De plus, la vitesse initiale de la balle ne change pas en fonction des manches/niveaux. Ce choix est ici justifié par le fait que l’intelligence artificielle évolue avec les manches/niveaux et c’est donc elle qui vient ajouter de la difficulté au jeu (en plus d’une variété de gameplay).</p>
+      <p>Comme précisé dans la partie précédente, la balle part dans la direction de son impact sur le cercle. On peut imaginer un vecteur qui est égal au rayon du cercle lors du toucher de balle.</p>
+	  <p>Je rajouterai que la gestion de collisions dans la page PONG Classique est sensiblement la même que dans le pong3D. Lors de l’impact, le jeu calcule la distance de la balle par rapport au centre de la raquette (qu’elle soit rectangulaire ou ronde) et applique un angle qui est en cohérence avec le résultat obtenu.
+	  </p>
+      <p>La raquette du joueur (hélicoptère) est sujette à une inertie justifiée par l’inertie réelle des hélicoptères en vol. Pour avancer, ceux-ci ont besoin de pencher vers la direction voulue, j’ai donc essayé de reproduire ce comportement le plus fidèlement possible. Le modèle penche et gagne en accélération jusqu’à atteindre une vitesse maximale. Les demi-tours ne sont pas instantanés et l’hélicoptère a besoin de revenir à son état initial avant de se pencher à nouveau, cette fois-ci en arrière.</p>
+      <p>Cette forte inertie peut poser certaines complications lors du jeu, j’ai ainsi décidé de permettre à l’utilisateur d’enlever l’inertie de son hélicoptère avec la touche « ctrl ». Mais à cette solution j’ai pensé bon de handicaper la puissance des tirs du joueur, qui passe ainsi à 80% de sa force initiale, encourageant alors le joueur à apprendre à utiliser la raquette avec inertie.</p>
+      <center><img src="rapport/images/Figure_18.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 18 : Un mal pour un bien</p>
+      </center>
+      <p>La balle ne peut pas être renvoyée vers le haut et ne peut pas rebondir sur le plateau. Cela n’allait pas avec l’univers que je souhaitais mettre en place mais je pense qu’il aurait été possible d’inclure cela dans un jeu de PONG simulant un jeu de ping-pong par exemple. La balle pourrait rebondir à des endroits fixes et les courbes ainsi créées auraient été sinusoïdales, toujours délimitées entre plusieurs points (les 2 zones de rebond et la raquette des joueurs).</p>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Jokers</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>J’étais légèrement réticent à l’ajout de jokers qui viennent surcharger le plateau de jeu. J’ai donc pris la décision de les cantonner à la zone située entre la partie du joueur et celle de l’adversaire.</p>
+      <center><img src="rapport/images/Figure_19.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 19 : Les eaux territoriales permettent le passage des Jokers</p>
+      </center>
+      <p>Il y a 2 différents Jokers :</p>
+      <ul>
+        <li>Le joker tronc : il permet à la raquette du joueur de s’agrandir, ce qui lui donne plus de puissance dans ses renvois de balles</li>
+        <li>Le joker sous-marin : quand la balle passe au-dessus du sous-marin situé au milieu du terrain, celui-ci s’enfonce sous l’eau et un autre sous-marin surgit du côté du joueur pour l’aider à encaisser une balle perdue</li>
+      </ul>
+      <center><img src="rapport/images/Figure_20.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 20 : Les 2 Jokers du jeu de NavalPong et non pas du paquet de cartes</p>
+      </center>
+	  <p>Les Jokers n’apparaissent qu’une fois et lorsqu’ils sont en jeu, ils suivent un itinéraire de déplacement allant de gauche à droite (pour le tronc) ou de droite à gauche (pour le sous-marin).</p>
+      <p>Puis ils disparaissent sous l’eau avant de ressortir de l’autre coté et réitérer ce même déplacement.</p>
+      <p>Les Jokers ne sont activables que pour le joueur, et ont une durée limitée, après quoi il se passe un temps aléatoire avant que le Joker ne revienne sur le plateau de jeu.</p>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Intelligence artificielle de l’adversaire</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>Les 3 représentations de l’ennemi donnent lieux à 3 intelligences artificielles différentes.</p>
+      <p>La première se veut classique et suit légèrement la balle sur l’axe x, et recule lorsque la balle se rapproche.</p>
+      <p>La deuxième suit le même principe, en augmentant grandement la vitesse de déplacement de l’ennemi, lequel, à la suite de cette amélioration voit sa puissance de frappe diminuer tout autant.</p>
+	  <p>La troisième intelligence artificielle agit différemment. L’ennemi se place au fond dans le coin droit de son plateau de jeu, et suit très légèrement la balle. Le rayon de son cercle est immense et lorsque la balle approche de lui il lui charge dessus afin d’envoyer un boulet de canon difficilement encaissable. Il faut à tout prix essayer de tirer à l’extrémité de sa position pour éviter qu’il ne touche ne serait-ce qu’une fois la balle.</p>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Musique et sons</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>Un soin tout particulier à été apporté à la musique et aux sons du jeu.</p>
+      <p>Si dans le PONG Classique les sons sont basés sur le PONG initial des années 70, dans NavalPong c’est différent. La musique se veut militaire et entrainante, accompagnée par des bruits de missiles sifflants d’une oreille à l’autre, ou encore des coups de canons retentissants au loin ou lors d’une touche entre la raquette et la balle. Un son prévient le joueur qu’il a gagné ou perdu son échange. Il y a aussi un son produit lors du Game Over pour informer le joueur que le jeu est terminé.</p>
+      <p>Il est possible de couper le son en pressant le bouton « Mute » situé en haut à gauche du jeu, ou en appuyant sur « m ». Remettre le son demande la même manipulation.</p>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Triche</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>Le cahier des charges précise 3 touches de triches :</p>
+      <ul>
+        <li>« i » permet à la balle de rebondir derrière la raquette sans pénalité pour le joueur (mais pas pour l’ennemi)</li>
+        <li>« j » pour faire apparaitre un nouveau joker n’a pas été traité. Les Jokers étant seulement au nombre de 2 et revenant assez vite sur le plateau de jeu, je n’ai pas jugé nécessaire d’ajouter ce raccourci de touche</li>
+        <li>« k » fait disparaitre les bateaux ennemis afin d’empêcher l’adversaire de profiter d’une couverture salvatrice pendant l’affrontement</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="w3-card-4 w3-margin w3-white">
+    <div class="w3-container">
+      <h3><b>Les petits plus !</b></h3>
+      <h5><hr></h5>
+    </div>
+
+    <div class="w3-container">
+      <p>L’ajout manuel de bateau directement dans le code se fait via la fonction suivante :</p>
+      <p>addBateau(LeNombreDeCasesQueLeBateauVaOccuper, LaColonneDeDépart, LaLigneDeDépart, LaDirectionDuBateau)</p>
+      <p>Avec un exemple : « addBateau(2, "A", 3, "gauche"); »</p>
+      <br>
+      <p>L’hélicoptère du joueur est équipé d’une boussole (rouge) indiquant la direction de la position de la balle. Cette boussole s’agrandit plus la balle se rapproche, permettant au joueur de deviner la position de la balle lors par exemple du changement de caméra sur l’hélicoptère.</p>
+      <center><img src="rapport/images/Figure_21.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 21 : Permet facilement de repérer (deviner) la position de la balle</p>
+      </center>
+      <br>
+      <p>Une fois la partie terminée, le jeu charge une nouvelle page, une variante de la page du PONG Classique. Cette page laisse quelques secondes au joueur avant d’activer un bouton situé en haut accompagné d’une sonnerie de téléphone. Une fois le bouton pressé, le joueur est redirigé vers une variante du NavalPong. La page d’accueil est remplie d’informations brouillées, les codes de triche sont désactivés, l’intelligence artificielle est plus puissante et rapide que dans le NavalPong, et le Game Over (qui se voit accorder un nouveau son) est synonyme de fin de ce mode de jeu. </p>
+      <center><img src="rapport/images/Figure_22.bmp" alt="Photo Illustrant Le Texte">
+      <p class="italic">Figure. 22 : Ce n’est pas encore fini ..</p>
+      </center>
+      <p>Concernant les petits plus graphiques, j’ai tout d’abord essayé d’ajouter différents effets de particules (fumée, pluie ou neige). N’ayant pas obtenu l’effet attendu, j’ai préféré me limiter à quelques particules tournant sous la raquette du joueur.</p>
+      <p>En appuyant sur « u » l’utilisateur peut faire apparaître/disparaître des bouées situées aux bords du plateau (voir Figure. 12). Les bouées sont réparties en 4 différents types qui se déplacent chacun différemment.</p>
+    </div>
+  </div>
+
+</div>
+
+</div><br>
+
+</div>
+
+<!-- Footer -->
+<footer class="w3-container w3-dark-grey w3-padding-32 w3-margin-top">
+  <p><b>En vous remerciant pour votre lecture et en vous souhaitant bon jeu !</b></p>
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset=utf-8>
+        <title>Classic PONG</title>
+        <style>
+            body { margin: 0; }
+            canvas { width: 100%; height: 100% }
+
+            .boutonNavalPong {
+                display: inline-block;
+                position: absolute;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                padding: 15px 25px;
+                font-size: 24px;
+                cursor: pointer;
+                text-align: center;
+                text-decoration: none;
+                outline: none;
+                color: #fff;
+                background-color: #CD1212;
+                border: none;
+                border-radius: 15px;
+                box-shadow: 0 9px #999;
+                margin-top: 3%;
+            }
+            .boutonNavalPong:hover {background-color: #F20A0A}
+
+            .boutonNavalPong:active {
+                background-color: #FE2B01;
+                box-shadow: 0 5px #666;
+                transform: translate(-50%, -42%);
+            }
+
+            .mute {
+                display: inline-block;
+                position: absolute;
+                padding: 15px 25px;
+                font-size: 12px;
+                cursor: pointer;
+                text-align: center;
+                text-decoration: none;
+                outline: none;
+                color: #fff;
+                background-color: #272727;
+                border: none;
+                border-radius: 15px;
+                margin-left: 0%;
+            }
+        </style>
+    </head>
+    <body>
+        <button class="boutonNavalPong" onclick="self.location.href='../../pong3D.html'">Retourner prendre part aux combats</button>
+
+        <button id="mute" class="mute">Mute</button>
+        <script>document.getElementById("mute").onclick = function () {if (mute == false) {mute=true;Howler.mute();document.getElementById('mute').innerHTML = 'UnMute';}else {mute=false;Howler.unmute();document.getElementById('mute').innerHTML = 'Mute';}};
+        </script>
+
+        <script src="../js/three.js"></script>
+        <script src="../js/dat.gui.min.js"></script>
+        <script src="../js/stats.js"></script>
+        <script src="../js/howler.js"></script>
+
+        <script>
+            // Variables
+            var scene = new THREE.Scene();
+            var camera = new THREE.OrthographicCamera(window.innerWidth / -32, window.innerWidth / 32, window.innerHeight / 32, window.innerHeight / -32, 1, 1000);
+
+            var paddle;
+            var side;
+            var sphere;
+            var line;
+
+            var Player;
+            var LinePT; // Top
+            var LinePL; // Left
+            var LinePR; // Right
+            var Enemy;
+            var LineET; // Top
+            var LineEL; // Left
+            var LineER; // Right
+            var Ball;
+            var Coupe;
+            var SideT;
+            var SideB;
+            var ScoreP;
+            var ScoreE;
+
+            var Last = "Player";
+            var LastWall = "Top";
+            var dirBall = "flat";
+            var scoreP = 0;
+            var scoreE = 0;
+            var engagement = 0;
+            var limVitesse = 3.5;
+            var limScore = 10;
+
+            var renderer;
+            var directiony = 1;
+            var directionx = 1;
+            var angle = 0;
+            var amplitude = 1;
+            var vitesse = 1;
+            var PlayerDeplac = "nul";
+            var EnemyDeplac = "nul";
+
+            var affichScoreP = document.createElement('div');
+            affichScoreP.style.position = 'absolute';
+            affichScoreP.style.width = 50;
+            affichScoreP.style.height = 100;
+            affichScoreP.style.color = "white";
+            affichScoreP.style.top = 55 + '%';
+            affichScoreP.style.left = 18 + '%';
+
+            var affichScoreE = document.createElement('div');
+            affichScoreE.style.position = 'absolute';
+            affichScoreE.style.width = 50;
+            affichScoreE.style.height = 100;
+            affichScoreE.style.color = "white";
+            affichScoreE.style.top = 55 + '%';
+            affichScoreE.style.left = 82 + '%';
+
+
+            //var pad = Gamepads.get(0);
+
+            function initScene() {
+                renderer = new THREE.WebGLRenderer({alpha: false}); // alpha: true pour fond blanc
+                renderer.setSize(window.innerWidth, window.innerHeight, true);
+                document.body.appendChild(renderer.domElement);
+            }
+
+
+
+            function initGeometry() {
+                // Barres
+                paddle = new THREE.BoxGeometry(1, 6, 1);
+                var material = new THREE.MeshBasicMaterial({color: 0xffffff});
+                Player = new THREE.Mesh(paddle, material);
+                material = new THREE.MeshBasicMaterial({color: 0xffffff});
+                Enemy = new THREE.Mesh(paddle, material);
+                Player.position.set(-20, 0, 0);
+                Player.name = "Joueur";
+                Enemy.position.set(20, 0, 0);
+                Enemy.name = "Ennemi";
+
+                paddles = new THREE.Object3D();
+                paddles.add(Enemy);
+                paddles.add(Player);
+
+                scene.add(paddles);
+
+                // Sphere
+                //sphere = new THREE.SphereGeometry(1, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+                sphere = new THREE.BoxGeometry(1, 1, 1);
+                material = new THREE.MeshBasicMaterial({color: 0xffffff});
+                Ball = new THREE.Mesh(sphere, material);
+                Ball.position.set(0, 0, 0);
+
+                scene.add(Ball);
+
+                // Victoire
+                sphere = new THREE.SphereGeometry(1, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+                material = new THREE.MeshBasicMaterial({color: 0xffd700});
+                Coupe = new THREE.Mesh(sphere, material);
+
+                // Bords
+                side = new THREE.BoxGeometry(50, 4, 5);
+                material = new THREE.MeshBasicMaterial({color: 0xffffff});
+                SidePT = new THREE.Mesh(side, material);
+                SidePB = new THREE.Mesh(side, material);
+                SidePT.position.set(0, 15, 0);
+                SidePT.name = "Bord Physique Top";
+                SidePB.position.set(0, -15, 0);
+                SidePB.name = "Bord Physique Bot";
+
+                scene.add(SidePT);
+                scene.add(SidePB);
+
+                // Lignes Bords Barre
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-19.5, 3, 0));
+                line.vertices.push(new THREE.Vector3(-19.5, -3, 0));
+                material = new THREE.LineBasicMaterial({color: 0xffffff});
+                LinePT = new THREE.Line(line, material);
+                LinePT.name = "Barre TOP du Joueur";
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-20.5, 3, 0));
+                line.vertices.push(new THREE.Vector3(-19.5, 3, 0));
+                LinePL = new THREE.Line(line, material);
+                LinePL.name = "Barre LEFT du Joueur";
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-20.5, -3, 0));
+                line.vertices.push(new THREE.Vector3(-19.5, -3, 0));
+                LinePR = new THREE.Line(line, material);
+                LinePR.name = "Barre RIGHT du Joueur";
+
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(19.5, 3, 0));
+                line.vertices.push(new THREE.Vector3(19.5, -3, 0));
+                material = new THREE.LineBasicMaterial({color: 0xffffff});
+                LineET = new THREE.Line(line, material);
+                LineET.name = "Barre TOP de l'Ennemi";
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(20.5, -3, 0));
+                line.vertices.push(new THREE.Vector3(19.5, -3, 0));
+                LineEL = new THREE.Line(line, material);
+                LineEL.name = "Barre LEFT de l'Ennemi";
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(20.5, 3, 0));
+                line.vertices.push(new THREE.Vector3(19.5, 3, 0));
+                LineER = new THREE.Line(line, material);
+                LineER.name = "Barre RIGHT de l'Ennemi";
+
+                // lignes bords
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-25, 13, 0));
+                line.vertices.push(new THREE.Vector3(25, 13, 0));
+                SideT = new THREE.Line(line, material);
+                SideT.name = "Bord Top";
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-25, -13, 0));
+                line.vertices.push(new THREE.Vector3(25, -13, 0));
+                SideB = new THREE.Line(line, material);
+                SideB.name = "Bord Bot";
+
+                scene.add(LinePT);
+                scene.add(LinePL);
+                scene.add(LinePR);
+                scene.add(LineET);
+                scene.add(LineEL);
+                scene.add(LineER);
+                scene.add(LineEL);
+                scene.add(LineER);
+                scene.add(SideT);
+                scene.add(SideB);
+
+                // Lignes Goals
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-25, 17, 0)); // A changer ?
+                line.vertices.push(new THREE.Vector3(-25, -17, 0)); // A changer ?
+                material = new THREE.LineBasicMaterial({color: 0xffffff});
+                ScoreP = new THREE.Line(line, material);
+                ScoreP.name = "Base P";
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(25, 17, 0)); // A changer ?
+                line.vertices.push(new THREE.Vector3(25, -17, 0)); // A changer ?
+                material = new THREE.LineBasicMaterial({color: 0xffffff});
+                ScoreE = new THREE.Line(line, material);
+                ScoreE.name = "Base E";
+
+                scene.add(ScoreP);
+                scene.add(ScoreE);
+            }
+
+            // Gestion Collisions //
+
+            // Rays
+            this.rays = [
+                new THREE.Vector3(0, 0, 1),
+                new THREE.Vector3(1, 0, 1),
+                new THREE.Vector3(1, 0, 0),
+                new THREE.Vector3(1, 0, -1),
+                new THREE.Vector3(0, 0, -1),
+                new THREE.Vector3(-1, 0, -1),
+                new THREE.Vector3(-1, 0, 0),
+                new THREE.Vector3(-1, 0, 1)
+            ];
+            this.ray = new THREE.Raycaster();
+
+            function checkCollisionsPaddleTop(b, vec, objects) {
+                this.ray.set(b.position.clone(), vec);
+                var collResults = this.ray.intersectObjects(objects, true);
+                if (collResults.length > 0 && collResults[0].distance < 1) {
+                    var object = collResults[0].object;
+                    console.log("Collision avec " + object.name);
+                    if (object.name == "Barre TOP du Joueur" && Last == "Enemy") {
+                        directionx = directionx * -1;
+                        if (Player.position.y < Ball.position.y) {
+                            angle = (Distance(Player, Ball) - 1.2) / 4;
+                            dirBall = "up";
+                        }
+                        else if (Player.position.y > Ball.position.y) {
+                            angle = (Distance(Player, Ball) - 1.2) / -4;
+                            dirBall = "down";
+                        }
+                        else {
+                            angle = 0;
+                            dirBall = "flat";
+                        }
+                        Last = "Player";
+                    }
+                    if (object.name == "Barre TOP de l'Ennemi" && Last == "Player") {
+                        directionx = directionx * -1;
+                        if (Enemy.position.y < Ball.position.y) {
+                            angle = (Distance(Ball, Enemy) - 1.2) / 4;
+                            dirBall = "up";
+                        }
+                        else if (Enemy.position.y > Ball.position.y) {
+                            angle = (Distance(Ball, Enemy) - 1.2) / -4;
+                            dirBall = "down";
+                        }
+                        else {
+                            angle = 0;
+                            dirBall = "flat";
+                        }
+                        Last = "Enemy";
+                    }
+                    if (vitesse < limVitesse) {
+                        vitesse += 0.1;
+                    }
+                    var sound = new Howl({
+                      urls: ['../medias/sounds/beeep.wav'],
+                      volume: 0.5
+                    }).play();
+                    return object;
+                }
+            }
+            ;
+
+            function checkCollisionsScore(b, vec, objects) {
+                this.ray.set(b.position.clone(), vec);
+                var collResults = this.ray.intersectObjects(objects, true);
+                if (collResults.length > 0 && collResults[0].distance < 1) {
+                    var object = collResults[0].object;
+                    console.log("Collision avec " + object.name);
+                    if (object.name == "Base P" && Last == "Enemy") {
+                        directionx = directionx * -1;
+                    }
+                    ;
+                    if (object.name == "Base E" && Last == "Player") {
+                        directionx = directionx * -1;
+                    }
+                    ;
+                    if (object.name == "Base P") {
+                        scoreE += 1;
+                        console.log(" ");
+                        console.log("Player : " + scoreP + " / Enemy : " + scoreE);
+                        console.log(" ");
+                        Last = "Player";
+                    } else {
+                        scoreP += 1;
+                        console.log(" ");
+                        console.log("Player : " + scoreP + " / Enemy : " + scoreE);
+                        console.log(" ");
+                        Last = "Enemy";
+                    }
+                    var sound = new Howl({
+                      urls: ['../medias/sounds/peeeeeep.wav'],
+                      volume: 0.5
+                    }).play();
+                    return object;
+                }
+            }
+            ;
+
+            function checkCollisionsSides(b, vec, objects) {
+                this.ray.set(b.position.clone(), vec);
+                var collResults = this.ray.intersectObjects(objects, true);
+                if (collResults.length > 0 && collResults[0].distance < 1) {
+                    var object = collResults[0].object;
+                    console.log("Collision avec " + object.name);
+                    if ((object.name == "Bord Top") && dirBall == "up") {
+                        angle = angle * -1;
+                        dirBall = "down";
+                    }
+                    if ((object.name == "Bord Bot") && dirBall == "down") {
+                        angle = angle * -1;
+                        dirBall = "up";
+                    }
+                    var sound = new Howl({
+                      urls: ['../medias/sounds/plop.wav'],
+                      volume: 0.8
+                    }).play();
+                    return object;
+                }
+            }
+            ;
+
+            function checkCollisionsPaddleSides(b, vec, objects) {
+                this.ray.set(b.position.clone(), vec);
+                var collResults = this.ray.intersectObjects(objects, true);
+                if (collResults.length > 0 && collResults[0].distance < 1) {
+                    var object = collResults[0].object;
+                    console.log("Collision avec " + object.name);
+                    if (object.name == "Barre LEFT du Joueur" && Last == "Enemy" && dirBall == "down") {
+                        angle = angle * -1;
+                        dirBall = "up";
+                    }
+                    ;
+                    if (object.name == "Barre RIGHT du Joueur" && Last == "Enemy" && dirBall == "up") {
+                        angle = angle * -1;
+                        dirBall = "down";
+
+                    }
+                    ;
+                    if (object.name == "Barre LEFT de l'Ennemi" && Last == "Player" && dirBall == "up") {
+                        angle = angle * -1;
+                        dirBall = "down";
+                    }
+                    ;
+                    if (object.name == "Barre RIGHT de l'Ennemi" && Last == "Player" && dirBall == "down") {
+                        angle = angle * -1;
+                        dirBall = "up";
+                    }
+                    ;
+                    var sound = new Howl({
+                      urls: ['../medias/sounds/beeep.wav'],
+                      volume: 0.5
+                    }).play();
+                    return object;
+                }
+            }
+            ;
+
+            // Lumiere
+            function initLight() {
+                var light = new THREE.PointLight(0xFFFFFF);
+                light.position.set(Ball.position.x, Ball.position.y, 10);
+                scene.add(light);
+            }
+
+            // Calcul de distance
+            function Distance(object1, object2) {
+                    return Math.sqrt(Math.sqrt(Math.abs(object1.position.y - object2.position.y)) + Math.sqrt(Math.abs(object2.position.x - object1.position.x)));
+            }
+
+            // Render
+            function render() {
+                requestAnimationFrame(render);
+                Ball.position.y += 1 * angle * amplitude;
+
+                if (scoreP == limScore) {
+                    Coupe.position.set(-30, 0, 0);
+                    scene.add(Coupe);
+                    scoreP = 0;
+                    scoreE = 0;
+                    Ball.position.x = 0;
+                    Ball.position.y = 0;
+                    vitesse = 1;
+                }
+                ;
+                if (scoreE == limScore) {
+                    Coupe.position.set(30, 0, 0);
+                    scene.add(Coupe);
+                    scoreP = 0;
+                    scoreE = 0;
+                    Ball.position.x = 0;
+                    Ball.position.y = 0;
+                    vitesse = 1;
+                }
+                ;
+
+                if (engagement == 2) {
+                    Ball.position.x += 0.2 * directionx * vitesse;
+                }
+                else {
+                    engagement = Math.floor(Math.random() * (1 - 0 + 1)) + 0;
+                    if (engagement == 1) {
+                        if (directionx < 0) {
+                            Last = "Enemy";
+                            engagement = 2;
+                        }
+                        ;
+                        if (directionx > 0) {
+                            Last = "Player";
+                            engagement = 2;
+                        }
+                    }
+                    ;
+                    if (engagement == 0) {
+                        directionx = directionx * -1;
+                        if (directionx < 0) {
+                            Last = "Enemy";
+                            engagement = 2;
+                        }
+                        ;
+                        if (directionx > 0) {
+                            Last = "Player";
+                            engagement = 2;
+                        }
+                    }
+                    ;
+                }
+                ;
+                if (PlayerDeplac == "bas" && Player.position.y > -10) {
+                    Player.position.y += -0.5;
+                    LinePT.position.y += -0.5;
+                    LinePL.position.y += -0.5;
+                    LinePR.position.y += -0.5;
+                }
+                ;
+                if (PlayerDeplac == "haut" && Player.position.y < 10) {
+                    Player.position.y += 0.5;
+                    LinePT.position.y += 0.5;
+                    LinePL.position.y += 0.5;
+                    LinePR.position.y += 0.5;
+                }
+                ;
+                if (EnemyDeplac == "bas" && Enemy.position.y > -10) {
+                    Enemy.position.y += -0.5;
+                    LineET.position.y += -0.5;
+                    LineEL.position.y += -0.5;
+                    LineER.position.y += -0.5;
+                }
+                ;
+                if (EnemyDeplac == "haut" && Enemy.position.y < 10) {
+                    Enemy.position.y += 0.5;
+                    LineET.position.y += 0.5;
+                    LineEL.position.y += 0.5;
+                    LineER.position.y += 0.5;
+                }
+                ;
+
+                renderer.render(scene, camera);
+                console.log(directionx);
+
+                affichScoreP.innerHTML = scoreP;
+                document.body.appendChild(affichScoreP);
+
+                affichScoreE.innerHTML = scoreE;
+                document.body.appendChild(affichScoreE);
+
+                checkCollisionsSides(Ball, rays, [SideT, SideB]);
+                checkCollisionsPaddleTop(Ball, rays, [LinePT, LineET]);
+                checkCollisionsPaddleSides(Ball, rays, [LineEL, LinePL, LineER, LinePR]);
+                checkCollisionsScore(Ball, rays, [ScoreP, ScoreE]);
+            }
+
+            // Deplacements
+            window.addEventListener("keydown", checkKeyPressed, false);
+            function checkKeyPressed(e) {
+                if (e.keyCode == "81") { // Q
+                    PlayerDeplac = "bas";
+                }
+                if (e.keyCode == "65") { // A
+                    PlayerDeplac = "haut";
+                }
+                if (e.keyCode == "77") { // M
+                    //console.log("o");
+                    EnemyDeplac = "bas";
+                }
+                if (e.keyCode == "80") { // P
+                    EnemyDeplac = "haut";
+                }
+                if (e.keyCode == "66") { // B
+                    Ball.position.x = 0;
+                    Ball.position.y = 0;
+                    scoreP = 0;
+                    scoreE = 0;
+                }
+            }
+            ;
+            window.addEventListener("keyup", checkKeyReleased, false);
+            function checkKeyReleased(e) {
+                if (e.keyCode == "81") { // Q
+                    PlayerDeplac = "nul";
+                }
+                if (e.keyCode == "65") { // A
+                    PlayerDeplac = "nul";
+                }
+                if (e.keyCode == "77") { // M
+                    EnemyDeplac = "nul";
+                }
+                if (e.keyCode == "80") { // P
+                    EnemyDeplac = "nul";
+                }
+                if (e.keyCode == "66") { // B
+                    engagement = 0;
+                }
+                if (e.keyCode == "72") { // H
+                    window.alert("Le monde a besoin de vous soldat !\nBon d'accord détendez-vous un peu avant si vous voulez ..\nMais n'abandonnez pas votre patrie !\n\nLes touches ? Les voici :\n   - a : monter pad de gauche\n   - q : descendre pad de gauche\n   - p : monter pad de droite\n   - m : descendre pad de droite\n\nLa partie est en 10 Manches");
+                }
+            }
+
+            // Lancement
+            initScene();
+            initGeometry();
+            camera.position.z = 5;
+            camera.position.y = 2;
+            initLight();
+            render();
+        </script>
+    </body>
+</html>
