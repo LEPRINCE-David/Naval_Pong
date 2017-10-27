@@ -136,25 +136,48 @@
             }
         </style>
   </head>
-  <body bgcolor=white>
+  <body>
 
-    <table border="0" cellpadding="10">
-      <tr>
-        <td>
-          <img src="images/springsource.png">
-        </td>
-        <td>
-          <h1>Sample "Hello, World" Application</h1>
-        </td>
-      </tr>
-    </table>
+    <div id=intro>
+            <img class="imageIntro" src="src/medias/images/intro.png" alt="ImageIntro">
+            <p class="titreIntro">
+            Objet : Déclaration de Guerre
+            </p>
+            <p class="titreIntro2">
+            Accords de la Mer Blanche
+            </p>
+            <p class="titreIntro3">
+            NavalPong
+            </p>
+            <p class="textIntro">
+            Soldat,<br/><br/>
+            On nous a attaqués !<br/><br/>
+            La déclaration de guerre à l'encontre de notre patrie s'est soldé par de fortes pertes de la part des 2 fronts.<br/>
+            Le monde va mal et la guerre n'est pas prête de se terminer.<br/><br/>
+            Mais il reste un espoir !<br/><br/>
+            Avec les accords de la Mer Blanche, nous avons convenu avec l'ennemi une possible sortie de guerre.<br/><br/>
+            Tout peut se jouer ici si vous voulez bien mener à la victoire notre partie de NavalPong !<br/><br/>
+            Les règles du jeu sont simples : Envoyer la balle derrière leur ligne, toucher leur sous-marin, tout en protégeant nos lignes.<br/>
+            Nous avons positionné des navires de guerre afin de vous aider à protéger du mieux que possible notre front.<br/>
+            Mais ne vous fiez pas trop à eux !<br/><br/>
+            Placez vous et en avant !<br/><br/>
+            Nous comptons sur vous !<br/><br/>
+            </p>
 
-    <p>This is the home page for the HelloWorld Web application. </p>
-    <p>To prove that they work, you can execute either of the following links:
-    <ul>
-      <li>To a <a href="hello.jsp">JSP page</a>.
-      <li>To a <a href="hello">servlet</a>.
-    </ul>
+            <button id="lancerNavalPong" class="boutonNavalPong" disabled>Accepter et rejoindre le NavalPong</button>
+
+            <button id="lancerClassicPong" class="boutonClassicPong" onclick="self.location.href='src/html/classic.html'" disabled>Refuser et retourner jouer au vrai Pong</button>
+
+            <script>document.getElementById("lancerNavalPong").onclick = function () {
+            document.getElementById('intro').innerHTML = '';
+            document.getElementById('all').setAttribute("overflow-y", "hidden");
+            document.getElementById('messageLancement').innerHTML = 'Appuyez sur L';
+            var sound = new Howl({
+              urls: ['src/medias/sounds/canon.mp3'],
+              volume: 0.5
+            }).play();};
+            </script>
+        </div>
 
   </body>
 </html>
