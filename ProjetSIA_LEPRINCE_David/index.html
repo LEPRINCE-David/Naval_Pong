@@ -4278,6 +4278,16 @@
                 }
             }
 
+            
+            // Lancement
+            initScene();
+            initLight();
+            initGeometry();
+            // Initialisation camera
+            camera.position.y = -36;
+            camera.position.z = 15;
+            camera.rotation.x = 1.05;
+            render();
           </script>
   </body>
 </html>
