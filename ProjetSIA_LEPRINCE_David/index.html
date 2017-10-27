@@ -204,5 +204,1256 @@
         <script src="src/passes/ShaderPass.js"></script>
         <script src="src/passes/HorizontalTiltShiftShader.js"></script>
 
+          <script>
+// Variables
+            var scene = new THREE.Scene();
+            var camera = new THREE.PerspectiveCamera(45, window.innerWidth / window.innerHeight, 0.1, 20000);
+            var composer;
+            var postProcess = false;
+            //var controls = new THREE.OrbitControls(camera);
+            var helico = new THREE.Object3D();
+            var helicoE = new THREE.Object3D();
+            var loader = new THREE.JSONLoader();
+            var contour = new THREE.Object3D();
+            var contour_v = new THREE.Object3D();
+            var contour_h = new THREE.Object3D();
+            music();
+            var mute = false;
+            var sound = new Howl({
+              urls: ['src/medias/sounds/intro.mp3'],
+              volume: 0.2,
+              buffer: true
+            }).play();
+            var Ball, Balle;
+            var Bateau2, Bateau4;
+            var baseE, baseP;
+            var outlineMesh1, outlineMesh2, outlineMesh3, outlineMesh4, outlineMesh5;
+            var sea;
+            var Seagull, Shark, Whale;
+            var bouee;
+            var Line;
+            var quadri;
+            var bouees1, bouees2, bouees3, bouees4;
+            var BoardP;
+            var BoardE;
+            var drapeauSprite;
+            var contour_v, contour_h;
+            var particleSystemP, particleSystemE;
+            var circleP, circleE, circlePJoker, arrow1, arrow2, arrowL, arrowR, aiguille;
+            var aiguilleX, aiguilleY;
+            var BallposX, BallposY;
+            var BallMovX = 0;
+            var BallMovY = 0;
+            var houleZ = 0;
+            var houleX = 0;
+            var run = 0;
+            var MouseX, MouseY;
+            var launch = 0;
+            var sprite;
+            var camHelico = false;
+            var camMouette = false;
+            var coeffVitBall = 1;
+            var pleinEcran = false;
+            var explosion = false;
+// gestion qualite
+            var lowquality = "true";
+            var changequality = false;
+            var bouees = "false";
+            var changeBouees = false;
+            var options = new THREE.Object3D();
+            var barresBut = new THREE.Object3D();
+            var boueesAlt = new THREE.Object3D();
+            var vueAerienne = false;
+            var spriteMap = new THREE.TextureLoader().load("src/medias/images/pirateLogo.png");
+            spriteMap.wrapS = THREE.RepeatWrapping;
+            spriteMap.repeat.x = - 1;
+            var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+            var pirateSprite = new THREE.Sprite( spriteMaterial );
+            spriteMap = new THREE.TextureLoader().load("src/medias/images/helicopterSPrite.png");
+            spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+            var ennemiSprite = new THREE.Sprite( spriteMaterial );
+            ennemiSprite.scale.set(1.5, 1.5, 1.5);
+            ennemiSprite.position.z = 2;
+            spriteMap = new THREE.TextureLoader().load("src/medias/images/unSprite.png");
+            spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+            var unSprite = new THREE.Sprite( spriteMaterial );
+            spriteMap = new THREE.TextureLoader().load("src/medias/images/unSprite.png");
+            spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+            var unSpriteE = new THREE.Sprite( spriteMaterial );
+            spriteMap = new THREE.TextureLoader().load("src/medias/images/deuxSprite.png");
+            spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+            var deuxSprite = new THREE.Sprite( spriteMaterial );
+            spriteMap = new THREE.TextureLoader().load("src/medias/images/deuxSprite.png");
+            spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+            var deuxSpriteE = new THREE.Sprite( spriteMaterial );
+            
+// gestion bonus
+            var bonus1 = new THREE.Object3D();
+            var bonus2 = new THREE.Object3D();
+            var bonus3 = new THREE.Object3D();
+            var arbreBonusTerrain = false;
+            var arbreBonus = false;
+            var ssMarinBonusTerrain = true;
+            var ssMarinBonus = false;
+            var submarine;
+            var submarineJoker;
+            var invincible = false;
+            var bateauxE = new THREE.Object3D();
+            var contourE = new THREE.Object3D();
+            var contour_vE = new THREE.Object3D();
+            var contour_hE = new THREE.Object3D();
+// gestion manches
+            var scoreJoueur = 0;
+            var scoreEnnemi = 0;
+            var changementManche = false;
+            var niveau = 1;
+            var changementNiveau = false;
+            var paperBoatScore  = new THREE.Object3D();
+            var paperBoatScoreLow  = new THREE.Object3D();
+            var gagnant = "";
+// pv bateaux
+            var pvBoat2 = 2;
+            var pvBoat2E = 2;
+            var pvBoat4 = 4;
+            var pvBoat4E = 4;
+// Deplacement joueur
+            var PlayerDeplac = "nul";
+            var haut = "nul";
+            var hautI = 0;
+            var bas = "nul";
+            var basI = 0;
+            var gauche = "nul";
+            var gaucheI = 0;
+            var droite = "nul";
+            var droiteI = 0;
+            var inertie = true;
+// Gestion ennemi
+            var EnemyDeplac = "nul";
+            var hautE = "nul";
+            var hautIE = 0;
+            var basE = "nul";
+            var basIE = 0;
+            var gaucheE = "nul";
+            var gaucheIE = 0;
+            var droiteE = "nul";
+            var droiteIE = 0;
+            var puissanceEnnemi = 1;
+            var coeffVitHelicoE = 1;
+// gestion deplacement balle
+            var directionY = 1;
+            var directionX = 1;
+// gestion collision
+            var cooldown = 0;
+            var toucheP = 0;
+            var toucheE = 0;
+            var toucheESuper = 0;
+            var toucheCollision = 0;
+// gestion post-process
+            var pass1 = new THREE.ShaderPass(THREE.HorizontalTiltShiftShader);
+            var renderer;
+// Voir les fps
+            /*var stats = new Stats();
+            stats.showPanel(0); // 0: fps, 1: ms, 2: mb, 3+: custom
+            document.body.appendChild(stats.dom);*/
+            var lastLoop = new Date;
+            var fps = 0;
+            function initScene() {
+                renderer = new THREE.WebGLRenderer({alpha: true, antialias: true, preserveDrawingBuffer: true}); // alpha: true pour fond blanc
+                renderer.setSize(window.innerWidth, window.innerHeight, true);
+                document.body.appendChild(renderer.domElement);
+// Composer
+                composer = new THREE.EffectComposer(renderer);
+// Passes
+                var renderPass = new THREE.RenderPass(scene, camera);
+                composer.addPass(renderPass);
+                pass1.renderToScreen = true;
+                pass1.uniforms['tDiffuse'].value = 1;
+                composer.addPass(pass1);
+            }
+// Initialisation des lumières
+            function initLight() {
+                var light = new THREE.PointLight(0xFFFFFF);
+                light.position.set(10, 0, 30);
+                scene.add(light);
+            }
+            function initGeometry() {
+// Creation de la balle
+                Balle = new THREE.Object3D();
+                sphereGeometry2 = new THREE.SphereGeometry(0.2, 50, 50, 0, Math.PI * 2, 0, Math.PI * 2);
+                material = new THREE.MeshBasicMaterial({color: 0x000000});
+                Ball = new THREE.Mesh(sphereGeometry2, material);
+                Ball.position.set(-11.5, 0, 1);
+                //Pour les tests
+                //Ball.position.set(2, -12, 1);
+                Ball.material.transparent = true;
+                Ball.material.opacity = 0.7;
+                Balle.add(Ball);
+// Creation des particules du cercle du joueur
+                var particleCount = 31;
+                var particles = new THREE.Geometry();
+                var particle_Material = new THREE.PointsMaterial({
+                color: 0x0FFFFFF,
+                size: 0.1
+                });
+                var min = -10,
+                max = 10;
+                // Create the individual particles
+                for (var i = 0; i < particleCount; i++) {
+                var radius = 0.7;
+                var random = Math.random();
+                var variance = Math.random();
+                var max = 10,
+                    min = -10;
+                //radius += (Math.floor(variance * (max - min + 1)) + min);
+                var pX = radius * Math.sin(random * (2 * Math.PI)),
+                    pY = radius * Math.cos(random * (2 * Math.PI)),
+                    pZ = 1;
+                var particle = new THREE.Vector3(
+                                    pX,pY,pZ
+                                );
+                particle.velocity = new THREE.Vector3(
+                                        0,
+                                        -Math.random(),
+                                        0
+                                    );
+                // Add the particle to the geometry
+                particles.vertices.push(particle);
+                }
+                // Create the particle system
+                particleSystemP = new THREE.Points(
+                                        particles,particle_Material
+                                    );
+                particleSystemP.sortParticles = true;
+                particleSystemP.name = "PartyCules";
+                // Add the particle system to the scene
+                scene.add(particleSystemP);
+                var radius   = 0.7,
+                segments = 64,
+                material = new THREE.LineBasicMaterial( { color: 0x0000ff } ),
+                geometry = new THREE.CircleGeometry( radius, segments );
+                // Remove center vertex
+                geometry.vertices.shift();
+                circleP = new THREE.Line( geometry, material );
+                circleP.position.z = 1;
+                circleP.name = "Player";
+                scene.add(circleP);
+// JOKER : Creation des particules du cercle du joueur
+                var particleCountJoker = 50;
+                var particlesJoker = new THREE.Geometry();
+                var particle_MaterialJoker = new THREE.PointsMaterial({
+                color: 0x0FFFFFF,
+                size: 0.1
+                });
+                var minJoker = -10,
+                maxJoker = 10;
+                // Create the individual particles
+                for (var i = 0; i < particleCountJoker; i++) {
+                var radiusJoker = (0.9 + Math.random()/10);
+                var randomJoker = Math.random();
+                var varianceJoker = Math.random();
+                var maxJoker = 10,
+                    minJoker = -10;
+                //radius += (Math.floor(variance * (max - min + 1)) + min);
+                var pXJoker = radiusJoker * Math.sin(randomJoker * (2 * Math.PI)),
+                    pYJoker = radiusJoker * Math.cos(randomJoker * (2 * Math.PI)),
+                    pZJoker = 1;
+                var particleJoker = new THREE.Vector3(
+                                    pX,pY,pZ
+                                );
+                particleJoker.velocity = new THREE.Vector3(
+                                        0,
+                                        -Math.random(),
+                                        0
+                                    );
+                // Add the particle to the geometry
+                particlesJoker.vertices.push(particleJoker);
+                }
+                // Create the particle system
+                particleSystemPJoker = new THREE.Points(
+                                        particles,particle_Material
+                                    );
+                particleSystemPJoker.sortParticles = true;
+                particleSystemPJoker.name = "PartyCulesJoker";
+                var radiusJoker   = 0.9,
+                segmentsJoker = 64,
+                materialJoker = new THREE.LineBasicMaterial( { color: 0x0000dd } ),
+                geometryJoker = new THREE.CircleGeometry( radiusJoker, segmentsJoker );
+                // Remove center vertex
+                geometryJoker.vertices.shift();
+                circlePJoker = new THREE.Line( geometryJoker, materialJoker );
+                circlePJoker.position.z = 1;
+                circlePJoker.name = "Player";
+// Creation des particules du cercle ennemi
+                var particleCount = 66;
+                var particles = new THREE.Geometry();
+                var particle_Material = new THREE.PointsMaterial({
+                color: 0x000000,
+                size: 0.2
+                });
+                var min = -10,
+                max = 10;
+                // Create the individual particles
+                for (var i = 0; i < particleCount; i++) {
+                var radius = 1;
+                var random = Math.random();
+                var variance = Math.random();
+                var max = 10,
+                    min = -10;
+                //radius += (Math.floor(variance * (max - min + 1)) + min);
+                var pX = radius * Math.sin(random * (2 * Math.PI)),
+                    pY = radius * Math.cos(random * (2 * Math.PI)),
+                    pZ = 1;
+                var particle = new THREE.Vector3(
+                                    pX,pY,pZ
+                                );
+                particle.velocity = new THREE.Vector3(
+                                        0,
+                                        -Math.random(),
+                                        0
+                                    );
+                // Add the particle to the geometry
+                particles.vertices.push(particle);
+                }
+                // Create the particle system
+                particleSystemE = new THREE.Points(
+                                        particles,particle_Material
+                                    );
+                particleSystemE.sortParticles = true;
+                particleSystemE.name = "PartyCules";
+                // Add the particle system to the scene
+                scene.add(particleSystemE);
+                var radius   = 1,
+                segments = 64,
+                material = new THREE.LineBasicMaterial( { color: 0xff0000 } ),
+                geometry = new THREE.CircleGeometry( radius, segments );
+                // Remove center vertex
+                geometry.vertices.shift();
+                circleE = new THREE.Line( geometry, material );
+                circleE.position.z = 1;
+                circleE.name = "Enemy";
+                scene.add( circleE );
+// Creation de la boussole sous le joueur
+                aiguille = new THREE.Mesh(new THREE.BoxGeometry(0.2, 0.7, 0.1), new THREE.MeshBasicMaterial({color: 0xff0000}));
+                aiguille.position.set(helico.position.x, helico.position.y, 1);
+                aiguille.rotation.z = 0;
+                scene.add(aiguille);
+//Creation effets sur la balle
+                var sphereGeometry = new THREE.SphereGeometry(0.2, 50, 50);
+                var outlineMaterial1 = new THREE.MeshBasicMaterial( { color: 0xff0000, side: THREE.BackSide } );
+                outlineMesh1 = new THREE.Mesh( sphereGeometry, outlineMaterial1 );
+                outlineMesh1.position = Ball.position;
+                outlineMesh1.scale.multiplyScalar(1.1);
+                outlineMesh1.material.transparent = true;
+                Balle.add( outlineMesh1 );
+                var outlineMaterial2 = new THREE.MeshBasicMaterial( { color: 0xff5a00, side: THREE.BackSide } );
+                outlineMesh2 = new THREE.Mesh( sphereGeometry, outlineMaterial2 );
+                outlineMesh2.position = Ball.position;
+                outlineMesh2.scale.multiplyScalar(1.2);
+                outlineMesh2.material.transparent = true;
+                Balle.add( outlineMesh2 );
+                var outlineMaterial3 = new THREE.MeshBasicMaterial( { color: 0xff9a00, side: THREE.BackSide } );
+                outlineMesh3 = new THREE.Mesh( sphereGeometry, outlineMaterial3 );
+                outlineMesh3.position = Ball.position;
+                outlineMesh3.scale.multiplyScalar(1.3);
+                outlineMesh3.material.transparent = true;
+                Balle.add( outlineMesh3 );
+                var outlineMaterial4 = new THREE.MeshBasicMaterial( { color: 0xffce00, side: THREE.BackSide } );
+                outlineMesh4 = new THREE.Mesh( sphereGeometry, outlineMaterial4 );
+                outlineMesh4.position = Ball.position;
+                outlineMesh4.scale.multiplyScalar(1.4);
+                outlineMesh4.material.transparent = true;
+                Balle.add( outlineMesh4 );
+                var outlineMaterial5 = new THREE.MeshBasicMaterial( { color: 0xffe808, side: THREE.BackSide } );
+                outlineMesh5 = new THREE.Mesh( sphereGeometry, outlineMaterial5 );
+                outlineMesh5.position = Ball.position;
+                outlineMesh5.scale.multiplyScalar(1.5);
+                outlineMesh5.material.transparent = true;
+                Balle.add( outlineMesh5 );
+                scene.add(Balle);
+                Ball.material.opacity = 0;
+                outlineMesh1.material.opacity = 0;
+                outlineMesh2.material.opacity = 0;
+                outlineMesh3.material.opacity = 0;
+                outlineMesh4.material.opacity = 0;
+                outlineMesh5.material.opacity = 0;
+// Ajout des nuages
+                texture = THREE.ImageUtils.loadTexture('src/medias/images/cloud_PNG.png'),
+                material = new THREE.MeshBasicMaterial({map: texture});
+                var cloud = new THREE.Mesh(new THREE.PlaneGeometry(1171,500), material);
+                cloud.rotation.x = Math.PI / 2;
+                cloud.position.y = 1100;
+                cloud.position.z = 200;
+                cloud.material.transparent = true;
+                cloud.material.opacity = 1;
+                scene.add(cloud);
+                texture = THREE.ImageUtils.loadTexture('src/medias/images/cloud_PNG2.png'),
+                material = new THREE.MeshBasicMaterial({map: texture});
+                cloud = new THREE.Mesh(new THREE.PlaneGeometry(1171,500), material);
+                cloud.rotation.x = Math.PI / 2;
+                cloud.rotation.y = -Math.PI / 2;
+                cloud.position.x = 1000;
+                cloud.position.y = -100;
+                cloud.position.z = 250;
+                cloud.material.transparent = true;
+                cloud.material.opacity = 1;
+                scene.add(cloud);
+                texture = THREE.ImageUtils.loadTexture('src/medias/images/cloud_PNG3.png'),
+                material = new THREE.MeshBasicMaterial({map: texture});
+                var cloud = new THREE.Mesh(new THREE.PlaneGeometry(916,500), material);
+                cloud.rotation.x = Math.PI / 2;
+                cloud.rotation.y = -Math.PI / 4;
+                cloud.position.x = 900;
+                cloud.position.y = 900;
+                cloud.position.z = 200;
+                cloud.material.transparent = true;
+                cloud.material.opacity = 1;
+                scene.add(cloud);
+                texture = THREE.ImageUtils.loadTexture('src/medias/images/cloud_PNG4.png'),
+                material = new THREE.MeshBasicMaterial({map: texture});
+                var cloud = new THREE.Mesh(new THREE.PlaneGeometry(916,500), material);
+                cloud.rotation.x = Math.PI / 2;
+                cloud.rotation.y = -Math.PI;
+                cloud.position.x = -500;
+                cloud.position.y = -900;
+                cloud.position.z = 150;
+                cloud.material.transparent = true;
+                cloud.material.opacity = 1;
+                scene.add(cloud);
+                texture = THREE.ImageUtils.loadTexture('src/medias/images/cloud_PNG5.png'),
+                material = new THREE.MeshBasicMaterial({map: texture});
+                var cloud = new THREE.Mesh(new THREE.PlaneGeometry(916,500), material);
+                cloud.rotation.x = Math.PI / 2;
+                cloud.rotation.y = Math.PI / 2;
+                cloud.position.x = -900;
+                cloud.position.z = 200;
+                cloud.material.transparent = true;
+                cloud.material.opacity = 1;
+                scene.add(cloud);
+                texture = THREE.ImageUtils.loadTexture('src/medias/images/cloud_PNG6.png'),
+                material = new THREE.MeshBasicMaterial({map: texture});
+                var cloud = new THREE.Mesh(new THREE.PlaneGeometry(916,500), material);
+                cloud.rotation.x = Math.PI / 2;
+                cloud.rotation.y = Math.PI / 4;
+                cloud.position.x = -800;
+                cloud.position.y = 800;
+                cloud.position.z = 150;
+                cloud.material.transparent = true;
+                cloud.material.opacity = 1;
+                scene.add(cloud);
+// Ajout quadrillage
+                quadri = new THREE.Object3D();
+                material = new THREE.LineBasicMaterial({color: 0x000000});
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, 6,  0.01));
+                line.vertices.push(new THREE.Vector3(-8, 22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-6, 6,  0.01));
+                line.vertices.push(new THREE.Vector3(-6, 22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-4, 6,  0.01));
+                line.vertices.push(new THREE.Vector3(-4, 22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-2, 6,  0.01));
+                line.vertices.push(new THREE.Vector3(-2, 22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(0, 6,  0.01));
+                line.vertices.push(new THREE.Vector3(0, 22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(2, 6,  0.01));
+                line.vertices.push(new THREE.Vector3(2, 22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(4, 6,  0.01));
+                line.vertices.push(new THREE.Vector3(4, 22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(6, 6,  0.01));
+                line.vertices.push(new THREE.Vector3(6, 22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(8, 6,  0.01));
+                line.vertices.push(new THREE.Vector3(8, 22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, 6,  0.01));
+                line.vertices.push(new THREE.Vector3(8, 6, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, 8,  0.01));
+                line.vertices.push(new THREE.Vector3(8, 8, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, 10,  0.01));
+                line.vertices.push(new THREE.Vector3(8, 10, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, 12,  0.01));
+                line.vertices.push(new THREE.Vector3(8, 12, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, 14,  0.01));
+                line.vertices.push(new THREE.Vector3(8, 14, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, 16,  0.01));
+                line.vertices.push(new THREE.Vector3(8, 16, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, 18,  0.01));
+                line.vertices.push(new THREE.Vector3(8, 18, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, 20,  0.01));
+                line.vertices.push(new THREE.Vector3(8, 20, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, 22,  0.01));
+                line.vertices.push(new THREE.Vector3(8, 22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, -6,  0.01));
+                line.vertices.push(new THREE.Vector3(-8, -22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-6, -6,  0.01));
+                line.vertices.push(new THREE.Vector3(-6, -22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-4, -6,  0.01));
+                line.vertices.push(new THREE.Vector3(-4, -22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-2, -6,  0.01));
+                line.vertices.push(new THREE.Vector3(-2, -22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(0, -6,  0.01));
+                line.vertices.push(new THREE.Vector3(0, -22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(2, -6,  0.01));
+                line.vertices.push(new THREE.Vector3(2, -22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(4, -6,  0.01));
+                line.vertices.push(new THREE.Vector3(4, -22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(6, -6,  0.01));
+                line.vertices.push(new THREE.Vector3(6, -22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(8, -6,  0.01));
+                line.vertices.push(new THREE.Vector3(8, -22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, -6,  0.01));
+                line.vertices.push(new THREE.Vector3(8, -6, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, -8,  0.01));
+                line.vertices.push(new THREE.Vector3(8, -8, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, -10,  0.01));
+                line.vertices.push(new THREE.Vector3(8, -10, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, -12,  0.01));
+                line.vertices.push(new THREE.Vector3(8, -12, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, -14,  0.01));
+                line.vertices.push(new THREE.Vector3(8, -14, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, -16,  0.01));
+                line.vertices.push(new THREE.Vector3(8, -16, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, -18,  0.01));
+                line.vertices.push(new THREE.Vector3(8, -18, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, -20,  0.01));
+                line.vertices.push(new THREE.Vector3(8, -20, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                line = new THREE.Geometry();
+                line.vertices.push(new THREE.Vector3(-8, -22,  0.01));
+                line.vertices.push(new THREE.Vector3(8, -22, 0.01));
+                Line = new THREE.Line(line, material);
+                quadri.add(Line);
+                quadri.position.z = -0.1;
+                quadri.visible = true;
+                scene.add(quadri);
+// Ajout des bases joueur/ennemi
+                loader.load('src/medias/models/baseE.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    baseE = new THREE.Mesh( geometry, material );
+                    baseE.name = "BaseE";
+                    baseE.scale.set(1.1,1.1,1.1);
+                    baseE.rotation.x = Math.PI / 2;
+                    baseE.position.set(-2, 25, -0.5);
+                    options.add(baseE);
+                    //scene.add(options);
+                });
+                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0xaa0000 } );
+                cube = new THREE.BoxGeometry(16.1, 0.5, 0.01);
+                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                barre.position.set(0, 23, 0.09);
+                barre.name = "Ligne Base Ennemie";
+                barresBut.add(barre);
+                scene.add(barresBut);
+                loader.load('src/medias/models/baseP.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    baseP = new THREE.Mesh( geometry, material );
+                    baseP.name = "BaseP";
+                    baseP.scale.set(0.8,0.8,0.8);
+                    baseP.rotation.x = Math.PI / 2;
+                    baseP.rotation.y = -Math.PI / 2;
+                    baseP.position.set(5, -30, 1.2);
+                    options.add(baseP);
+                    //scene.add(options);
+                });
+                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0x0000aa } );
+                cube = new THREE.BoxGeometry(16.1, 0.5, 0.01);
+                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                barre.position.set(0, -23, 0.09);
+                barre.name = "Ligne Base Joueur";
+                barresBut.add(barre);
+                scene.add(barresBut);
+// Ajout du bateau pirate
+                loader.load('src/medias/models/perla.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    pirate = new THREE.Mesh( geometry, material );
+                    pirate.name = "Bateau Pirate";
+                    pirate.scale.set(1.1,1.1,1.1);
+                    pirate.rotation.x = Math.PI / 2 - 0.1;
+                    pirate.position.set(-13, 0, 0.3);
+                    options.add(pirate);
+                    //scene.add(options);
+                });
+                pirateSprite.scale.set(12, 7.63, 10);
+                pirateSprite.position.set(-15,-1,3);
+                scene.add(pirateSprite);
+// Ajout des helicos (joueur/ennemi)
+                helico1 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material); // Initialiser helico
+                helico2 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material); // Initialiser helico
+                helicoE1 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
+                helicoE2 = new THREE.Mesh(new THREE.BoxGeometry(1, 1, 1), material);
+                loader.load('src/medias/models/helico.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    helico1 = new THREE.Mesh( geometry, material );
+                    helico1.name = "helico";
+                    helico1.scale.set(0.2,0.2,0.2);
+                    //helico.rotation.x = Math.PI / 2 - 0.1;
+                    helico1.position.set(0,0,1.5);
+                    helico.add(helico1);
+                });
+                loader.load('src/medias/models/helico2.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    helico2 = new THREE.Mesh( geometry, material );
+                    helico2.name = "helico";
+                    helico2.scale.set(0.2,0.2,0.2);
+                    //helico.rotation.z = Math.PI/2;
+                    helico2.position.set(0,0,1.5);
+                    helico.add(helico2);
+                });
+                scene.add(helico); // helico du joueur
+                loader.load('src/medias/models/helicoE_.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    helicoE1 = new THREE.Mesh( geometry, material );
+                    helicoE1.name = "helico ennemi";
+                    helicoE1.scale.set(0.4,0.4,0.4);
+                    //helicoE1.rotation.z = Math.PI;
+                    helicoE1.position.set(0,0,2);
+                    helicoE.add(helicoE1);
+                });
+                loader.load('src/medias/models/helicoE2.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    helicoE2 = new THREE.Mesh( geometry, material );
+                    helicoE2.name = "helico ennemi";
+                    helicoE2.scale.set(0.4,0.4,0.4);
+                    //helicoE2.rotation.z = Math.PI;
+                    helicoE2.position.set(0,0,2);
+                    helicoE.add(helicoE2);
+                });
+                helicoE.position.set(-6,8,0);
+                scene.add(ennemiSprite);
+// Divers ajout pour l'environnement
+                loader.load('src/medias/models/seagull.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    Seagull = new THREE.SkinnedMesh( geometry, material );
+                    Seagull.name = "Mouette";
+                    Seagull.rotation.x = Math.PI/2;
+                    Seagull.rotation.y = 0;
+                    Seagull.position.set(0,0,5);
+                    scene.add(Seagull);
+                });
+                loader.load('src/medias/models/shark.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    Shark = new THREE.Mesh( geometry, material );
+                    Shark.name = "Requin";
+                    Shark.rotation.x = Math.PI/2;
+                    Shark.rotation.y = Math.PI/2;
+                    Shark.position.set(-40,0,-1);
+                    if (Math.random() < 0.5) {
+                        Shark.position.y = 5;
+                    }
+                    else {Shark.position.y = -5}
+                    options.add(Shark);
+                });
+// Ajout des power-up
+                loader.load('src/medias/models/tree.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    material.side = THREE.DoubleSide;
+                    tree = new THREE.Mesh( geometry, material );
+                    tree.name = "Arbre";
+                    tree.scale.set(0.2,0.2,0.2);
+                    tree.rotation.x = Math.PI / 2;
+                    tree.rotation.y = Math.PI / 2;
+                    tree.position.set(1000, -1, -0.15);
+                    bonus1.add(tree);
+                    scene.add(bonus1);
+                });
+                loader.load('src/medias/models/submarine.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    material.side = THREE.DoubleSide;
+                    submarine = new THREE.Mesh( geometry, material );
+                    submarine.name = "SousMarin";
+                    submarine.scale.set(1,1,1);
+                    submarine.rotation.x = Math.PI / 2;
+                    submarine.rotation.y = -Math.PI / 2;
+                    submarine.position.set(-1000, 2, -1.2);
+                    bonus1.add(submarine);
+                    scene.add(bonus1);
+                });
+                loader.load('src/medias/models/submarine.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    material.side = THREE.DoubleSide;
+                    submarineJoker = new THREE.Mesh( geometry, material );
+                    submarineJoker.name = "SousMarinJoker";
+                    submarineJoker.scale.set(1,1,1);
+                    submarineJoker.rotation.x = Math.PI / 2;
+                    submarineJoker.rotation.y = -Math.PI / 2;
+                    submarineJoker.position.set(0, -10, -20);
+                });
+// Ajout des bouees
+                var barre = new THREE.Mesh(new THREE.BoxGeometry(0.5, 46.2, 0.01), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+                barre.position.set(9, 0, 0.09);
+                boueesAlt.add(barre);
+                var barre = new THREE.Mesh(new THREE.BoxGeometry(0.5, 46.2, 0.01), new THREE.MeshBasicMaterial({ color: 0x000000 }));
+                barre.position.set(-9, 0, 0.09);
+                boueesAlt.add(barre);
+                scene.add(boueesAlt);
+                // 4 différents types de bouees pour une gestion de houle plus realiste
+                bouees1 = new THREE.Object3D();
+                bouees2 = new THREE.Object3D();
+                bouees3 = new THREE.Object3D();
+                bouees4 = new THREE.Object3D();
+        // Pas de boucle parce que l'incrémentation du variables temporaire prendrait effet de suite alors que le chargement des modèles arrivent en fin -> Tout les modèles se chargent quand la variable à atteint sa valeur finale et se retrouvent ainsi au meme emplacement
+            // PARTIE GAUCHE
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-22,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-20,0);
+                    bouees2.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-18,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-16,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-14,0);
+                    bouees4.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-12,0);
+                    bouees2.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-10,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-8,0);
+                    bouees4.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-6,0);
+                    bouees2.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-4,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,-2,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,0,0);
+                    bouees2.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,2,0);
+                    bouees4.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,4,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,6,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,8,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,10,0);
+                    bouees4.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,12,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,14,0);
+                    bouees2.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,16,0);
+                    bouees4.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,18,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,20,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(-9,22,0);
+                    bouees2.add(bouee);
+                });
+            // PARTIE DROITE
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,22,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,20,0);
+                    bouees2.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,18,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,16,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,14,0);
+                    bouees4.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,12,0);
+                    bouees2.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,10,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,8,0);
+                    bouees4.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,6,0);
+                    bouees2.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,4,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,2,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,0,0);
+                    bouees2.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-2,0);
+                    bouees4.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-4,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-6,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-8,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-10,0);
+                    bouees4.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-12,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-14,0);
+                    bouees2.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-16,0);
+                    bouees4.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-18,0);
+                    bouees1.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-20,0);
+                    bouees3.add(bouee);
+                });
+                loader.load('src/medias/models/Bouee.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    bouee = new THREE.Mesh( geometry, material );
+                    bouee.name = "Bouee1";
+                    bouee.scale.set(0.2,0.2,0.2);
+                    bouee.rotation.x = Math.PI/2;
+                    bouee.rotation.y = Math.PI/2;
+                    bouee.position.set(9,-22,0);
+                    bouees2.add(bouee);
+                });
+          </script>
   </body>
 </html>
