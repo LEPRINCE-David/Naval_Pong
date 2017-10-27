@@ -1455,5 +1455,398 @@
                     bouees2.add(bouee);
                 });
           </script>
+          
+          
+          // Creation de l'effet d'eau
+                var waterNormals = new THREE.ImageUtils.loadTexture('src/medias/images/waternormals.jpg');
+                waterNormals.wrapS = waterNormals.wrapT = THREE.RepeatWrapping; 
+        
+                var light = new THREE.PointLight(0xFFFFFF);
+                light.position.set(30, 30, 30);
+                ms_Water = new THREE.Water(renderer, camera, scene, {
+                    textureWidth: 256,
+                    textureHeight: 256,
+                    waterNormals: waterNormals,
+                    alpha:  0.95,
+                    sunDirection: light.position.normalize(),
+                    //sunColor: 0xfdb813,
+                    sunColor: 0xfcd440,
+                    waterColor: 0x006994,
+                    betaVersion: 0,
+                    side: THREE.DoubleSide
+                });
+                var aMeshMirror = new THREE.Mesh(
+                    new THREE.PlaneBufferGeometry(2000, 2000, 10, 10), 
+                    ms_Water.material
+                );
+                aMeshMirror.add(ms_Water);
+                
+               scene.add(aMeshMirror);
+// Creation de la skybox
+               var aCubeMap = THREE.ImageUtils.loadTextureCube([
+                  'src/medias/images/nx.jpg',
+                  'src/medias/images/px.jpg',
+                  'src/medias/images/pz.jpg',
+                  'src/medias/images/nz.jpg',
+                  'src/medias/images/py.jpg',
+                  'src/medias/images/ny.jpg'
+                ]);
+                aCubeMap.format = THREE.RGBFormat;
+                var aShader = THREE.ShaderLib['cube'];
+                aShader.uniforms['tCube'].value = aCubeMap;
+                var aSkyBoxMaterial = new THREE.ShaderMaterial({
+                  fragmentShader: aShader.fragmentShader,
+                  vertexShader: aShader.vertexShader,
+                  uniforms: aShader.uniforms,
+                  depthWrite: false,
+                  side: THREE.BackSide
+                });
+                var aSkybox = new THREE.Mesh(
+                  new THREE.BoxGeometry(3000, 3000, 3000),
+                  aSkyBoxMaterial
+                );
+                //aSkybox.rotation.z = -Math.PI * 0.5;
+                aSkybox.position.z = 100;
+                
+                scene.add(aSkybox);
+// Differents tests pour le placement des bateaux
+                addBateau(2, "G", 1, "droite");
+                addBateau(4, "H", 8, "gauche");
+                addBateauE(2, "A", 3, "gauche");
+                addBateauE(4, "H", 8, "haut");
+            }; // fin initGeometry
+// Gestion Des Collisions//
+            // Rays
+            this.rays = [
+                new THREE.Vector3(0, 0, 1),
+                new THREE.Vector3(1, 0, 1),
+                new THREE.Vector3(1, 0, 0),
+                new THREE.Vector3(1, 0, -1),
+                new THREE.Vector3(0, 0, -1),
+                new THREE.Vector3(-1, 0, -1),
+                new THREE.Vector3(-1, 0, 0),
+                new THREE.Vector3(-1, 0, 1)
+            ];
+            this.ray = new THREE.Raycaster();
+            function checkCollisionsPaddle(b, vec, objects) {
+                this.ray.set(b.position.clone(), vec);
+                var collResults = this.ray.intersectObjects(objects, true);
+                if (collResults.length > 0 && collResults[0].distance < 1) {
+                    var object = collResults[0].object;
+                    console.log("Collision avec " + object.name);
+                    if (object.name == "Player"){
+                        if (toucheP == 0) {
+                            setTimeout(function(){
+                                directionY = directionY * -1;
+                            }, 20);
+                            cooldown = 1;
+                            toucheP = 1;
+                            coeffVitBall += 0.01;
+                            var sound = new Howl({
+                              urls: ['src/medias/sounds/drum.wav']
+                            }).play();
+                            setTimeout(function(){
+                                toucheP = 0;
+                            }, 500);
+                        }
+                    }
+                    if (object.name == "Enemy"){
+                        if (toucheE == 0) {
+                            setTimeout(function(){
+                                directionY = directionY * -1;
+                            }, 20);
+                            cooldown = 1;
+                            toucheE = 1;
+                            toucheESuper = 1;
+                            coeffVitBall += 0.01;
+                            var sound = new Howl({
+                              urls: ['src/medias/sounds/drum.wav']
+                            }).play();
+                            setTimeout(function(){
+                                toucheE = 0;
+                            }, 500);
+                            setTimeout(function(){
+                                toucheESuper = 0;
+                            }, 2000);
+                        }
+                    }
+                    launch=1;
+                    
+                    return object;
+                }
+            };
+            function checkCollisionsContour(b, vec, objects) {
+                this.ray.set(b.position.clone(), vec);
+                var collResults = this.ray.intersectObjects(objects, true);
+                if (collResults.length > 0 && collResults[0].distance < 1) {
+                    var object = collResults[0].object;
+                    console.log("Collision avec " + object.name);
+                    if ((object.name == "Petit Bateau L Y T") || (object.name == "Petit Bateau L Y B") && toucheCollision == 0) {
+                        toucheCollision = 1;
+                        bateau2.position.z = bateau2.position.z - 0.2;
+                        bateau2.rotation.x += Math.sin(Math.random())/ 1000;
+                        bateau2.rotation.y += -0.05;
+                        bateau2.rotation.z -= Math.PI/20;
+                        pvBoat2 -= 1;
+                        if (pvBoat2 <= 0) {
+                            var selectedObject = new THREE.Object3D();
+                            selectedObject.add(scene.getObjectByName("Petit Bateau"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau G X L"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau G X R"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau L X L"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau L X R"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau G Y T"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau G Y B"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau L Y T"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau L Y B"))
+                            scene.remove( selectedObject );
+                        };
+                        directionY = directionY * -1;
+                        setTimeout(function(){
+                            toucheCollision = 0;
+                        }, 400);
+                    };
+                    if ((object.name == "Petit Bateau L X L") || (object.name == "Petit Bateau L X R") && toucheCollision == 0) {
+                        toucheCollision = 1;
+                        bateau2.position.z = bateau2.position.z - 0.1;
+                        bateau2.rotation.x += Math.sin(Math.random())/ 1000;
+                        bateau2.rotation.y += -0.05;
+                        bateau2.rotation.z -= Math.PI/20;
+                        pvBoat2 -= 1;
+                        if (pvBoat2 <= 0) {
+                            var selectedObject = new THREE.Object3D();
+                            selectedObject.add(scene.getObjectByName("Petit Bateau"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau G X L"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau G X R"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau L X L"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau L X R"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau G Y T"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau G Y B"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau L Y T"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau L Y B"))
+                            scene.remove( selectedObject );
+                        };
+                        directionX = directionX * -1;
+                        setTimeout(function(){
+                            toucheCollision = 0;
+                        }, 200);
+                    };
+                    if ((object.name == "Petit Bateau E L Y T") || (object.name == "Petit Bateau E L Y B") && toucheCollision == 0) {
+                        toucheCollision = 1;
+                        bateau2E.position.z = bateau2.position.z - 0.2;
+                        bateau2E.rotation.x += Math.sin(Math.random())/ 1000;
+                        bateau2E.rotation.y += -0.05;
+                        bateau2E.rotation.z -= Math.PI/20;
+                        pvBoat2E -= 1;
+                        if (pvBoat2E <= 0) {
+                            var selectedObject = new THREE.Object3D();
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E G X L"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E G X R"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E L X L"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E L X R"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E G Y T"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E G Y B"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E L Y T"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E L Y B"))
+                            scene.remove( selectedObject );
+                        };
+                        directionY = directionY * -1;
+                        setTimeout(function(){
+                            toucheCollision = 0;
+                        }, 400);
+                    };
+                    if ((object.name == "Petit Bateau E L X L") || (object.name == "Petit Bateau E L X R") && toucheCollision == 0) {
+                        toucheCollision = 1;
+                        bateau2E.position.z = bateau2.position.z - 0.1;
+                        bateau2E.rotation.x += Math.sin(Math.random())/ 1000;
+                        bateau2E.rotation.y += -0.05;
+                        bateau2E.rotation.z -= Math.PI/20;
+                        pvBoat2E -= 1;
+                        if (pvBoat2E <= 0) {
+                            var selectedObject = new THREE.Object3D();
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E G X L"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E G X R"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E L X L"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E L X R"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E G Y T"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E G Y B"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E L Y T"))
+                            selectedObject.add(scene.getObjectByName("Petit Bateau E L Y B"))
+                            scene.remove( selectedObject );
+                        };
+                        directionX = directionX * -1;
+                        setTimeout(function(){
+                            toucheCollision = 0;
+                        }, 200);
+                    };
+                    if ((object.name == "Grand Bateau L Y T") || (object.name == "Grand Bateau L Y B") && toucheCollision == 0) {
+                        toucheCollision = 1;
+                        bateau4.position.z = bateau4.position.z - 0.2;
+                        bateau4.rotation.x += Math.sin(Math.random())/ 1000;
+                        bateau4.rotation.y += -0.05;
+                        bateau4.rotation.z -= Math.PI/20;
+                        pvBoat4 -= 1;
+                        if (pvBoat4 <= 0) {
+                            var selectedObject = new THREE.Object3D();
+                            selectedObject.add(scene.getObjectByName("Grand Bateau"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau G X L"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau G X R"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau L X L"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau L X R"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau G Y T"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau G Y B"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau L Y T"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau L Y B"))
+                            scene.remove( selectedObject );
+                        };
+                        directionY = directionY * -1;
+                        setTimeout(function(){
+                            toucheCollision = 0;
+                        }, 400);
+                    };
+                    if ((object.name == "Grand Bateau L X L") || (object.name == "Grand Bateau L X R") && toucheCollision == 0) {
+                        toucheCollision = 1;
+                        bateau4.position.z = bateau4.position.z - 0.1;
+                        bateau4.rotation.x += Math.sin(Math.random())/ 1000;
+                        bateau4.rotation.y += -0.05;
+                        bateau4.rotation.z -= Math.PI/20;
+                        pvBoat4 -= 1;
+                        if (pvBoat4 <= 0) {
+                            var selectedObject = new THREE.Object3D();
+                            selectedObject.add(scene.getObjectByName("Grand Bateau"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau G X L"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau G X R"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau L X L"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau L X R"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau G Y T"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau G Y B"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau L Y T"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau L Y B"))
+                            scene.remove( selectedObject );
+                        };
+                        directionX = directionX * -1;
+                        setTimeout(function(){
+                            toucheCollision = 0;
+                        }, 200);
+                    };
+                    if ((object.name == "Grand Bateau E L Y T") || (object.name == "Grand Bateau E L Y B") && toucheCollision == 0) {
+                        toucheCollision = 1;
+                        bateau4E.position.z = bateau4E.position.z - 0.2;
+                        bateau4E.rotation.x += Math.sin(Math.random())/ 1000;
+                        bateau4E.rotation.y += -0.05;
+                        bateau4E.rotation.z -= Math.PI/20;
+                        pvBoat4E -= 1;
+                        if (pvBoat4E <= 0) {
+                            var selectedObject = new THREE.Object3D();
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E G X L"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E G X R"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E L X L"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E L X R"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E G Y T"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E G Y B"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E L Y T"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E L Y B"))
+                            scene.remove( selectedObject );
+                        };
+                        directionY = directionY * -1;
+                        setTimeout(function(){
+                            toucheCollision = 0;
+                        }, 400);
+                    };
+                    if ((object.name == "Grand Bateau E L X L") || (object.name == "Grand Bateau E L X R") && toucheCollision == 0) {
+                        toucheCollision = 1;
+                        bateau4E.position.z = bateau4E.position.z - 0.1;
+                        bateau4E.rotation.x += Math.sin(Math.random())/ 1000;
+                        bateau4E.rotation.y += -0.05;
+                        bateau4E.rotation.z -= Math.PI/20;
+                        pvBoat4E -= 1;
+                        if (pvBoat4E <= 0) {
+                            var selectedObject = new THREE.Object3D();
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E G X L"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E G X R"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E L X L"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E L X R"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E G Y T"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E G Y B"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E L Y T"))
+                            selectedObject.add(scene.getObjectByName("Grand Bateau E L Y B"))
+                            scene.remove( selectedObject );
+                        };
+                        directionX = directionX * -1;
+                        setTimeout(function(){
+                            toucheCollision = 0;
+                        }, 200);
+                    };
+                    launch=1;
+                    console.log(pvBoat2);
+                    
+                    return object;
+                }
+            };
+            function checkCollisionsBonus(b, vec, objects) {
+                this.ray.set(b.position.clone(), vec);
+                var collResults = this.ray.intersectObjects(objects, true);
+                if (collResults.length > 0 && collResults[0].distance < 1) {
+                    var object = collResults[0].object;
+                    console.log("Collision avec " + object.name);
+                    if (object.name == "Arbre"){
+                        scene.remove(particleSystemP);
+                        scene.add(particleSystemPJoker);
+                        scene.remove(circleP);
+                        scene.add(circlePJoker);
+                        arbreBonusTerrain = false;
+                        arbreBonus = true;
+                        setTimeout(function(){
+                            scene.add(particleSystemP);
+                            scene.remove(particleSystemPJoker);
+                            scene.add(circleP);
+                            scene.remove(circlePJoker);
+                            arbreBonus = false;
+                            arbreBonusTerrain = true;
+                        }, 15000)
+                    }
+                    if (object.name == "SousMarinJoker"){
+                        scene.remove(submarineJoker);
+                        submarineJoker.position.z -= 15;
+                        directionY = directionY * -1;
+                        ssMarinBonus = false;
+                        setTimeout(function(){
+                            ssMarinBonusTerrain = true;
+                        }, 15000)
+                    }
+                    
+                    return object;
+                }
+            };
+// Calcul de distance
+            function Distance(object1, object2) {
+                    return Math.sqrt((object1.position.y - object2.position.y) * (object1.position.y - object2.position.y) + (object1.position.x - object2.position.x) * (object1.position.x - object2.position.x));
+            }
+// Music
+            function music() {
+                var music = new Howl({
+                urls: ['src/medias/music/music3.mp3'],
+                autoplay: true,
+                loop: false,
+                volume: 0.3,
+                buffer: true,
+                onend: function() {
+                    next();
+                }
+                });
+            }
+            function next() {
+                var music = new Howl({
+                urls: ['src/medias/music/music5.mp3'],
+                autoplay: true,
+                loop: false,
+                volume: 0.3,
+                buffer: true
+                });
+            }
   </body>
 </html>
