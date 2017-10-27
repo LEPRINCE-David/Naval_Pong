@@ -3514,6 +3514,198 @@
                     }
                 }
               
+              
+              
+              // Gestion de la houle
+                if( typeof pirate != "undefined" ){
+                pirate.position.z += Math.sin(houleZ)/1500;
+                pirate.rotation.x += Math.sin(houleX)/2000;
+                pirate.rotation.z += Math.sin(houleZ)/4000;
+                }
+                if( typeof baseE != "undefined" ){
+                baseE.position.z += Math.sin(houleZ)/2000;
+                baseE.rotation.x += Math.sin(houleX)/2000;
+                baseE.rotation.z += Math.sin(houleZ)/10000;
+                }
+                if( typeof baseP != "undefined" ){
+                baseP.position.z += Math.sin(houleZ)/2000;
+                baseP.rotation.y += Math.sin(houleX)/20000;
+                baseP.rotation.z += Math.sin(houleZ)/50000;
+                }
+                if( typeof paperboat != "undefined" ){
+                paperboat.position.z += Math.sin(houleZ)/2000;
+                paperboat.rotation.z += Math.sin(houleZ)/2000;
+                }if( typeof paperboatE != "undefined" ){
+                paperboatE.position.z += Math.sin(houleZ)/-2000;
+                paperboatE.rotation.y += Math.sin(houleX)/-500;
+                paperboatE.rotation.z += Math.sin(houleZ)/-2000;
+                }
+                if( typeof tree != "undefined" ){
+                tree.position.z += Math.sin(houleZ)/2000;
+                tree.rotation.x += Math.sin(houleX)/20000;
+                tree.rotation.y += Math.sin(houleX)/5000;
+                tree.rotation.z += Math.sin(houleZ)/250;
+                }
+                if( typeof submarine != "undefined" ){
+                submarine.position.z += Math.sin(houleZ)/2000;
+                }
+                if (typeof bouees1 != "undefined"){
+                    bouees1.rotation.z += Math.sin(houleZ)/10000;
+                }
+                if (typeof bouees2 != "undefined"){
+                    bouees2.rotation.z += Math.sin(houleX)/10000;
+                }
+                if (typeof bouees3 != "undefined"){
+                    bouees3.rotation.z += Math.sin(-houleX)/10000;
+                }
+                if (typeof bouees4 != "undefined"){
+                    bouees4.rotation.z += Math.sin(-houleZ)/10000;
+                }
+// Deplacement helico
+                if (bas == "true" && helico.position.y > -23) {
+                    if (inertie) {
+                        if (helico.rotation.x < 0.4) {
+                            helico.rotation.x += 0.005;
+                            if (helico.rotation.x > 0) {basI += 0.0125;}
+                        };
+                        helico.position.y += -0.1 * basI;
+                    }
+                    else {helico.position.y += -0.1;}
+                };
+                if (haut == "true" && helico.position.y < -6) {
+                    if (inertie) {
+                        if (helico.rotation.x > -0.4) {
+                            helico.rotation.x += -0.005;
+                            if (helico.rotation.x < 0) {hautI += 0.0125;}
+                        };
+                        helico.position.y += 0.1 * hautI;
+                    }
+                    else {helico.position.y += 0.1;}
+                };
+                if (gauche == "true" && helico.position.x > -8) {
+                    if (inertie) {
+                        if (helico.rotation.y > -0.4) {
+                            helico.rotation.y += -0.005;
+                            if (helico.rotation.y < 0) {gaucheI += 0.0125;}
+                        };
+                        helico.position.x += -0.1 * gaucheI;
+                    }
+                    else {helico.position.x += -0.1;}
+                };
+                if (droite == "true" && helico.position.x < 8) {
+                    if (inertie) {
+                        if (helico.rotation.y < 0.4) {
+                            helico.rotation.y += 0.005;
+                            if (helico.rotation.y > 0) {droiteI += 0.0125;}
+                        };
+                        helico.position.x += 0.1 * droiteI;
+                    }
+                    else {helico.position.x += 0.1;}
+                };
+                if (haut == "nul") {
+                    if (inertie) {
+                        if (helico.rotation.x < 0) {
+                            helico.rotation.x += 0.01;
+                            hautI -= 0.025;
+                            if (helico.position.y < -6) {helico.position.y += 0.1 * hautI;}
+                            if (helico.rotation.x > 0) {if (bas == "nul"){helico.rotation.x = 0;} hautI = 0;}
+                        };
+                    }
+                };
+                if (bas == "nul") {
+                    if (inertie) {
+                        if (helico.rotation.x > 0) {
+                            helico.rotation.x += -0.01;
+                            basI -= 0.025;
+                            if (helico.position.y > -23) {helico.position.y += -0.1 * basI;}
+                            if (helico.rotation.x < 0) {if (haut == "nul"){helico.rotation.x = 0;} basI = 0;}
+                        };
+                    }
+                };
+                if (gauche == "nul") {
+                    if (inertie) {
+                        if (helico.rotation.y < 0) {
+                            helico.rotation.y += 0.01;
+                            gaucheI -= 0.025;
+                            if (helico.position.x > -8) {helico.position.x += -0.1 * gaucheI;}
+                            if (helico.rotation.y > 0) {if (droite == "nul"){helico.rotation.y = 0;} gaucheI = 0;}
+                        };
+                    }
+                }
+                if (droite == "nul") {
+                    if (inertie) {
+                        if (helico.rotation.y > 0) {
+                            helico.rotation.y += -0.01;
+                            droiteI -= 0.025;
+                            if (helico.position.x < 8) {helico.position.x += 0.1 * droiteI;}
+                            if (helico.rotation.y < 0) {if (gauche == "nul"){helico.rotation.y = 0;} droiteI = 0;}
+                        };
+                    }
+                };
+// Deplacement Divers
+                document.addEventListener( 'mousemove', onDocumentMouseMove, false );
+                if( typeof Seagull != "undefined" ){
+                    if (Seagull.position.x < (MouseX/20-35)){Seagull.position.x += 0.01; Seagull.rotation.y = -Math.PI/2;}
+                    else if (Seagull.position.x > (MouseX/20-33)){Seagull.position.x -= 0.01; Seagull.rotation.y = Math.PI/2;};
+                    Seagull.position.z += Math.sin(houleZ*10)/200;
+                    Seagull.rotation.x += Math.sin(houleX*10)/200;
+                    Seagull.rotation.z += Math.sin(houleZ*10)/500;
+                    Seagull.rotation.y += Math.sin(houleX*10)/500;
+                    if (Seagull.position.y < (-MouseY/20+7)){Seagull.position.y += 0.01; Seagull.rotation.y = Seagull.rotation.y/2;}
+                    else if (Seagull.position.y > (-MouseY/20+9)){
+                        Seagull.position.y -= 0.01;
+                        Seagull.rotation.y = Math.PI;
+                        if (Seagull.position.x < (MouseX/20-35)){Seagull.rotation.y = -3*Math.PI/4;};
+                        if (Seagull.position.x > (MouseX/20-33)){Seagull.rotation.y = 3*Math.PI/4;};};
+                    Seagull.position.z += Math.sin(houleZ*7)/250;
+                    Seagull.rotation.x += Math.sin(houleX*7)/250;
+                    Seagull.rotation.z += Math.sin(houleZ*7)/250;
+                    Seagull.rotation.y += Math.sin(houleX*7)/250;
+                };
+                if( typeof Shark != "undefined" ){
+                    Shark.position.z += Math.sin(houleZ)/2000;
+                    Shark.rotation.x += Math.sin(houleX)/2000;
+                    Shark.rotation.z += Math.sin(houleZ)/5000;
+                    Shark.rotation.y += Math.sin(houleX)/5000;
+                    Shark.position.x += 0.02;
+                }
+                if( typeof tree != "undefined" ){
+                    tree.position.x+= 0.01;
+                    if (tree.position.x > 7 || arbreBonus) {
+                        tree.position.z-=0.001;
+                        if (tree.position.x > 12 && arbreBonusTerrain) {
+                            setTimeout(function(){
+                                tree.position.x= -10;
+                                tree.position.z= -0.5;
+                            }, (Math.random()*4000+2000));
+                        }
+                    }
+                    if (tree.position.x < -6) {
+                        tree.position.z+=0.001;
+                    }
+                }
+                if( typeof submarine != "undefined" ){
+                    submarine.position.x-= 0.005;
+                    if (submarine.position.x < -8 || ssMarinBonus) {
+                        submarine.position.z-=0.01;
+                        if (submarine.position.z < -10) {scene.remove(submarine);}
+                        if (submarine.position.x < -12 && ssMarinBonusTerrain) {
+                            setTimeout(function(){
+                                scene.add(submarine);
+                                submarine.position.x= 10;
+                                submarine.position.z= -2;
+                            }, (Math.random()*4000+2000));
+                        }
+                    }
+                    if (submarine.position.x > 6) {
+                        submarine.position.z+=0.001;
+                    }
+                }
+                if( typeof submarineJoker != "undefined" ){
+                    if (submarineJoker.position.z < -0.1) {
+                        submarineJoker.position.z += 0.01;
+                    }
+                }
           </script>
   </body>
 </html>
