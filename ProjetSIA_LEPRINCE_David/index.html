@@ -178,6 +178,31 @@
             }).play();};
             </script>
         </div>
+    
+    <button id="mute" class="mute">Mute</button>
+        <script>document.getElementById("mute").onclick = function () {if (mute == false) {mute=true;Howler.mute();document.getElementById('mute').innerHTML = 'UnMute';}else {mute=false;Howler.unmute();document.getElementById('mute').innerHTML = 'Mute';}};
+        </script>
+
+        <div id="all">
+        <div id="defaite" class="defaite">
+        </div>
+            <p id=messageLancement class="lancement">
+            </p>
+
+        <script src="src/js/three.js"></script>
+        <script src="src/js/dat.gui.min.js"></script>
+        <script src="src/js/stats.js"></script>
+        <script src='src/js/THREEx.FullScreen.js'></script>
+        <script src="src/js/water-material.js"></script>
+        <script src="src/js/mirror.js"></script>
+        <script src="src/js/window.js"></script>
+        <script src="src/js/OrbitControls.js"></script>
+        <script src="src/js/howler.js"></script>
+        <script src="src/passes/EffectComposer.js"></script>
+        <script src="src/passes/CopyShader.js"></script>
+        <script src="src/passes/RenderPass.js"></script>
+        <script src="src/passes/ShaderPass.js"></script>
+        <script src="src/passes/HorizontalTiltShiftShader.js"></script>
 
   </body>
 </html>
