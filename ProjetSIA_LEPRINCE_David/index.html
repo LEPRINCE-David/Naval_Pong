@@ -151,7 +151,7 @@
             </p>
             <p class="textIntro">
             Soldat,<br/><br/>
-            On nous a attaqués !<br/><br/>
+            On nous tataa attaqués !<br/><br/>
             La déclaration de guerre à l'encontre de notre patrie s'est soldé par de fortes pertes de la part des 2 fronts.<br/>
             Le monde va mal et la guerre n'est pas prête de se terminer.<br/><br/>
             Mais il reste un espoir !<br/><br/>
@@ -3706,6 +3706,578 @@
                         submarineJoker.position.z += 0.01;
                     }
                 }
+              
+              
+              // IA helico ennemi
+                if (lowquality == "true") {
+                    if (niveau==1) {
+                        if (ennemiSprite.position.x < (-6.6) && launch==0){ennemiSprite.position.x = ennemiSprite.position.x + 0.06 * coeffVitHelicoE;}
+                        else if (ennemiSprite.position.x > (-6.4) && launch==0){ennemiSprite.position.x = ennemiSprite.position.x - 0.06 * coeffVitHelicoE;};
+                        if (ennemiSprite.position.x < (Ball.position.x - 0.9) && launch==1 && ennemiSprite.position.x < 8){ennemiSprite.position.x = ennemiSprite.position.x + 0.06 * coeffVitHelicoE;}
+                        else if (ennemiSprite.position.x > (Ball.position.x + 0.9) && launch==1 && ennemiSprite.position.x > -8){ennemiSprite.position.x = ennemiSprite.position.x - 0.06 * coeffVitHelicoE;};
+                        if (ennemiSprite.position.y < (6.9) && launch==0){ennemiSprite.position.y = ennemiSprite.position.y + 0.06;}
+                        else if (ennemiSprite.position.y > (7.1) && launch==0){ennemiSprite.position.y = ennemiSprite.position.y - 0.06;};
+                        if ((ennemiSprite.position.y < (Ball.position.y - 0.9) || ((BallMovY*directionY>0) && ennemiSprite.position.y < (Ball.position.y + 5))) && launch==1 && ennemiSprite.position.y < 21){ennemiSprite.position.y = ennemiSprite.position.y + 0.06 * coeffVitHelicoE;}
+                        else if (ennemiSprite.position.y > (Ball.position.y + 0.9) && launch==1 && ennemiSprite.position.y > 6){ennemiSprite.position.y = ennemiSprite.position.y - 0.06 * coeffVitHelicoE;}
+                    }
+                    if (niveau==2) {
+                        if (ennemiSprite.position.x < (-1) && launch==0){ennemiSprite.position.x = ennemiSprite.position.x + 0.06 * coeffVitHelicoE;}
+                        else if (ennemiSprite.position.x > (1) && launch==0){ennemiSprite.position.x = ennemiSprite.position.x - 0.06 * coeffVitHelicoE;};
+                        if (ennemiSprite.position.x < (Ball.position.x - 0.4) && launch==1 && ennemiSprite.position.x < 8 && toucheESuper!=1){ennemiSprite.position.x = ennemiSprite.position.x + 0.06 * coeffVitHelicoE;}
+                        else if (ennemiSprite.position.x > (Ball.position.x + 0.4) && launch==1 && ennemiSprite.position.x > -8 && toucheESuper!=1){ennemiSprite.position.x = ennemiSprite.position.x - 0.06 * coeffVitHelicoE;};
+                        if (ennemiSprite.position.y < (17.9) && launch==0){ennemiSprite.position.y = ennemiSprite.position.y + 0.06;}
+                        else if (ennemiSprite.position.y > (18.1) && launch==0){ennemiSprite.position.y = ennemiSprite.position.y - 0.06;};
+                        if ((ennemiSprite.position.y < (Ball.position.y - 0.4) || (BallMovY*directionY>0)) && launch==1 && ennemiSprite.position.y < 21 && toucheESuper!=1){ennemiSprite.position.y = ennemiSprite.position.y + 0.01 * coeffVitHelicoE;}
+                        else if (ennemiSprite.position.y > (Ball.position.y + 0.4) && launch==1 && ennemiSprite.position.y > 6 && toucheESuper!=1){ennemiSprite.position.y = ennemiSprite.position.y - 0.06 * coeffVitHelicoE;};
+                    }
+                    if (niveau==3) {
+                        // Replacement
+                        if (ennemiSprite.position.x < (3.9) && launch==0){ennemiSprite.position.x = ennemiSprite.position.x + 0.06 * coeffVitHelicoE}
+                        else if (ennemiSprite.position.x > (4.1) && launch==0){ennemiSprite.position.x = ennemiSprite.position.x - 0.06 * coeffVitHelicoE}
+                        else if (ennemiSprite.position.y < (21) && launch==0){ennemiSprite.position.y = ennemiSprite.position.y + 0.06;}
+                        // Charge
+                        else if (ennemiSprite.position.x > (Ball.position.x - 2.3) && ennemiSprite.position.x < (Ball.position.x + 2.3) && ennemiSprite.position.y > Ball.position.y && Ball.position.y > 13 && (BallMovY*directionY>0) && launch==1 && ennemiSprite.position.y < 22){ennemiSprite.position.y = ennemiSprite.position.y - 0.31 * coeffVitHelicoE}
+                        // Recule
+                        else if (ennemiSprite.position.y < 21){ennemiSprite.position.y = ennemiSprite.position.y + 0.06 * coeffVitHelicoE}
+                        // Droite
+                        else if (ennemiSprite.position.x < (Ball.position.x - 1.3) && launch==1 && ennemiSprite.position.x < 7){ennemiSprite.position.x = ennemiSprite.position.x + 0.06 * coeffVitHelicoE}
+                        // Gauche
+                        else if (ennemiSprite.position.x > (Ball.position.x + 1.3) && launch==1 && ennemiSprite.position.x > -7){ennemiSprite.position.x = ennemiSprite.position.x - 0.06 * coeffVitHelicoE}
+                    }
+                }
+                else {
+                    if (niveau==1) {
+                        if (helicoE.position.x < (-6.6) && launch==0){helicoE.position.x = helicoE.position.x + 0.06 * coeffVitHelicoE;}
+                        else if (helicoE.position.x > (-6.4) && launch==0){helicoE.position.x = helicoE.position.x - 0.06 * coeffVitHelicoE;};
+                        if (helicoE.position.x < (Ball.position.x - 0.9) && launch==1 && helicoE.position.x < 8){helicoE.position.x = helicoE.position.x + 0.06 * coeffVitHelicoE;}
+                        else if (helicoE.position.x > (Ball.position.x + 0.9) && launch==1 && helicoE.position.x > -8){helicoE.position.x = helicoE.position.x - 0.06 * coeffVitHelicoE;};
+                        if (helicoE.position.y < (6.9) && launch==0){helicoE.position.y = helicoE.position.y + 0.06;}
+                        else if (helicoE.position.y > (7.1) && launch==0){helicoE.position.y = helicoE.position.y - 0.06;};
+                        if ((helicoE.position.y < (Ball.position.y - 0.9) || ((BallMovY*directionY>0) && helicoE.position.y < (Ball.position.y + 5))) && launch==1 && helicoE.position.y < 21){helicoE.position.y = helicoE.position.y + 0.06 * coeffVitHelicoE;}
+                        else if (helicoE.position.y > (Ball.position.y + 0.9) && launch==1 && helicoE.position.y > 6){helicoE.position.y = helicoE.position.y - 0.06 * coeffVitHelicoE;}
+                    }
+                    if (niveau==2) {
+                        if (helicoE.position.x < (-1) && launch==0){helicoE.position.x = helicoE.position.x + 0.06 * coeffVitHelicoE;}
+                        else if (helicoE.position.x > (1) && launch==0){helicoE.position.x = helicoE.position.x - 0.06 * coeffVitHelicoE;};
+                        if (helicoE.position.x < (Ball.position.x - 0.4) && launch==1 && helicoE.position.x < 8 && toucheESuper!=1){helicoE.position.x = helicoE.position.x + 0.06 * coeffVitHelicoE;}
+                        else if (helicoE.position.x > (Ball.position.x + 0.4) && launch==1 && helicoE.position.x > -8 && toucheESuper!=1){helicoE.position.x = helicoE.position.x - 0.06 * coeffVitHelicoE;};
+                        if (helicoE.position.y < (17.9) && launch==0){helicoE.position.y = helicoE.position.y + 0.06;}
+                        else if (helicoE.position.y > (18.1) && launch==0){helicoE.position.y = helicoE.position.y - 0.06;};
+                        if ((helicoE.position.y < (Ball.position.y - 0.4) || (BallMovY*directionY>0)) && launch==1 && helicoE.position.y < 21 && toucheESuper!=1){helicoE.position.y = helicoE.position.y + 0.01 * coeffVitHelicoE;}
+                        else if (helicoE.position.y > (Ball.position.y + 0.4) && launch==1 && helicoE.position.y > 6 && toucheESuper!=1){helicoE.position.y = helicoE.position.y - 0.06 * coeffVitHelicoE;};
+                    }
+                    if (niveau==3) {
+                        // Replacement
+                        if (helicoE.position.x < (3.9) && launch==0){helicoE.position.x = helicoE.position.x + 0.06 * coeffVitHelicoE; helicoE1.rotation.y = 0}
+                        else if (helicoE.position.x > (4.1) && launch==0){helicoE.position.x = helicoE.position.x - 0.06 * coeffVitHelicoE; helicoE1.rotation.y = Math.PI}
+                        else if (helicoE.position.y < (21) && launch==0){helicoE.position.y = helicoE.position.y + 0.06;}
+                        // Charge
+                        else if (helicoE.position.x > (Ball.position.x - 2.3) && helicoE.position.x < (Ball.position.x + 2.3) && helicoE.position.y > Ball.position.y && Ball.position.y > 13 && (BallMovY*directionY>0) && launch==1 && helicoE.position.y < 22){helicoE.position.y = helicoE.position.y - 0.31 * coeffVitHelicoE; helicoE1.rotation.y = -Math.PI/2;}
+                        // Recule
+                        else if (helicoE.position.y < 21){helicoE.position.y = helicoE.position.y + 0.06 * coeffVitHelicoE; helicoE1.rotation.y = Math.PI/2;}
+                        // Droite
+                        else if (helicoE.position.x < (Ball.position.x - 1.3) && launch==1 && helicoE.position.x < 7){helicoE.position.x = helicoE.position.x + 0.06 * coeffVitHelicoE; helicoE1.rotation.y = 0;}
+                        // Gauche
+                        else if (helicoE.position.x > (Ball.position.x + 1.3) && launch==1 && helicoE.position.x > -7){helicoE.position.x = helicoE.position.x - 0.06 * coeffVitHelicoE; helicoE1.rotation.y = Math.PI}
+                        else {helicoE1.rotation.y = -Math.PI/2;}
+                    }
+                }
+// Gestion Manches || Changement ennemi
+// Changement Manche
+                if (changementManche==true) {
+                    Ball.material.opacity = 0;
+                    outlineMesh1.material.opacity = 0;
+                    outlineMesh2.material.opacity = 0;
+                    outlineMesh3.material.opacity = 0;
+                    outlineMesh4.material.opacity = 0;
+                    outlineMesh5.material.opacity = 0;
+                    BallMovX = 0;
+                    BallMovY = 0;
+                    directionY = 1;
+                    coeffVitBall = 1;
+                    Ball.position.set(-11.5, 0, 1);
+                    launch = 0;
+                    setTimeout(function(){
+                        directionX = 1;
+                        BallMovX = Math.random() / 20;
+                        if (BallMovX < 0.025) {BallMovX += 0.025};
+                        if (gagnant == "Joueur") {
+                            BallMovY = 0.05;
+                        }
+                        else {
+                            BallMovY = -0.05;
+                        }
+                        
+                        setTimeout(function(){
+                            Ball.material.opacity = 1;
+                            outlineMesh1.material.opacity = 1;
+                            outlineMesh2.material.opacity = 1;
+                            outlineMesh3.material.opacity = 1;
+                            outlineMesh4.material.opacity = 1;
+                            outlineMesh5.material.opacity = 1;
+                        }, 200);
+                    }, 3000);
+                    changementManche = false;
+                }
+// Changement Niveau
+                if (niveau == 1 && changementNiveau == true) {
+                    niveau = 2;
+                    document.getElementById('messageLancement').innerHTML = 'Victoire !';
+                    scene.remove(helicoE);
+                    helicoE.remove(helicoE1);
+                    helicoE.remove(helicoE2);
+                    scene.remove(circleE);
+                    scene.remove(particleSystemE);
+                    Ball.material.opacity = 0;
+                    outlineMesh1.material.opacity = 0;
+                    outlineMesh2.material.opacity = 0;
+                    outlineMesh3.material.opacity = 0;
+                    outlineMesh4.material.opacity = 0;
+                    outlineMesh5.material.opacity = 0;
+                    BallMovX = 0;
+                    BallMovY = 0;
+                    directionY = 1;
+                    coeffVitBall = 1;
+                    scoreJoueur = 0;
+                    scoreEnnemi = 0;
+                    Ball.position.set(-11.5, 0, 1);
+                    launch = 0;
+                    setTimeout(function(){
+                        document.getElementById('messageLancement').innerHTML = 'Qu\'est-ce que ?';
+                        coeffVitHelicoE = 2.75;
+                        directionX = 1;
+                        BallMovX = Math.random() / 20;
+                        if (BallMovX < 0.025) {BallMovX += 0.025};
+                        BallMovY = -0.05; // la balle part vers le joueur
+                        setTimeout(function(){
+                            Ball.material.opacity = 1;
+                            outlineMesh1.material.opacity = 1;
+                            outlineMesh2.material.opacity = 1;
+                            outlineMesh3.material.opacity = 1;
+                            outlineMesh4.material.opacity = 1;
+                            outlineMesh5.material.opacity = 1;
+                        }, 200);
+// On recree helico et particules
+                        setTimeout(function(){
+                            document.getElementById('messageLancement').innerHTML = 'Tenez-bon Soldat !';
+                            setTimeout(function(){
+                                document.getElementById('messageLancement').innerHTML = '';
+                            }, 4000);
+                            var particleCount = 66;
+                            var particles = new THREE.Geometry();
+                            var particle_Material = new THREE.PointsMaterial({
+                            color: 0x00ff00,
+                            size: 0.2
+                            });
+                            var min = -10,
+                            max = 10;
+                            // Create the individual particles
+                            for (var i = 0; i < particleCount; i++) {
+                            var radius = 0.5;
+                            var random = Math.random();
+                            var variance = Math.random();
+                            var max = 10,
+                                min = -10;
+                            //radius += (Math.floor(variance * (max - min + 1)) + min);
+                            var pX = radius * Math.sin(random * (2 * Math.PI)),
+                                pY = radius * Math.cos(random * (2 * Math.PI)),
+                                pZ = 1;
+                            var particle = new THREE.Vector3(
+                                                pX,pY,pZ
+                                            );
+                            particle.velocity = new THREE.Vector3(
+                                                    0,
+                                                    -Math.random(),
+                                                    0
+                                                );
+                            // Add the particle to the geometry
+                            particles.vertices.push(particle);
+                            }
+                            // Create the particle system
+                            particleSystemE = new THREE.Points(
+                                                    particles,particle_Material
+                                                );
+                            particleSystemE.sortParticles = true;
+                            particleSystemE.name = "PartyCules";
+                            // Add the particle system to the scene
+                            scene.add(particleSystemE);
+                            var radius = 0.5,
+                            segments = 64,
+                            material = new THREE.LineBasicMaterial( { color: 0x000000 } ),
+                            geometry = new THREE.CircleGeometry( radius, segments );
+                            // Remove center vertex
+                            geometry.vertices.shift();
+                            circleE = new THREE.Line( geometry, material );
+                            circleE.position.z = 1;
+                            circleE.name = "Enemy";
+                            scene.add( circleE );
+                        }, 2200);
+                        loader.load('scr/medias/models/superman.json', function addModelToScene( geometry, materials) {
+                        var material = new THREE.MeshFaceMaterial(materials);
+                        helicoE1 = new THREE.Mesh( geometry, material );
+                        helicoE1.name = "superman";
+                        helicoE1.scale.set(0.4,0.4,0.4);
+                        helicoE1.rotation.x = Math.PI/2;
+                        helicoE1.position.set(0,0,0.4);
+                        helicoE.add(helicoE1);
+                        });
+                        helicoE.position.set(-6,8,0);
+                        if (lowquality == "false") {
+                            scene.add(helicoE);
+                        }
+                    }, 6000);
+                    changementNiveau = false;
+                }
+                if (niveau == 2 && changementNiveau == true) {
+                    niveau = 3;
+                    document.getElementById('messageLancement').innerHTML = 'Enfin !';
+                    scene.remove(helicoE);
+                    helicoE.remove(helicoE1);
+                    helicoE.remove(helicoE2);
+                    scene.remove(circleE);
+                    scene.remove(particleSystemE);
+                    Ball.material.opacity = 0;
+                    outlineMesh1.material.opacity = 0;
+                    outlineMesh2.material.opacity = 0;
+                    outlineMesh3.material.opacity = 0;
+                    outlineMesh4.material.opacity = 0;
+                    outlineMesh5.material.opacity = 0;
+                    BallMovX = 0;
+                    BallMovY = 0;
+                    directionY = 1;
+                    coeffVitBall = 1;
+                    scoreJoueur = 0;
+                    scoreEnnemi = 0;
+                    Ball.position.set(-11.5, 0, 1);
+                    launch = 0;
+                    setTimeout(function(){
+                        document.getElementById('messageLancement').innerHTML = 'Quoi encore ?!';
+                        setTimeout(function(){
+                            document.getElementById('messageLancement').innerHTML = 'Abattez-moi ça !';
+                        }, 2200);
+                        setTimeout(function(){
+                            document.getElementById('messageLancement').innerHTML = '';
+                        }, 6200);
+                        coeffVitHelicoE = 0.75;
+                        directionX = 1;
+                        BallMovX = Math.random() / 20;
+                        if (BallMovX < 0.025) {BallMovX += 0.025};
+                        BallMovY = -0.05; // la balle part vers le joueur
+                        setTimeout(function(){
+                            Ball.material.opacity = 1;
+                            outlineMesh1.material.opacity = 1;
+                            outlineMesh2.material.opacity = 1;
+                            outlineMesh3.material.opacity = 1;
+                            outlineMesh4.material.opacity = 1;
+                            outlineMesh5.material.opacity = 1;
+                        }, 200);
+// On recree helico et particules
+                        var particleCount = 66;
+                        var particles = new THREE.Geometry();
+                        var particle_Material = new THREE.PointsMaterial({
+                        color: 0xffffff,
+                        size: 0.2
+                        });
+                        var min = -10,
+                        max = 10;
+                        // Create the individual particles
+                        for (var i = 0; i < particleCount; i++) {
+                        var radius = 2;
+                        var random = Math.random();
+                        var variance = Math.random();
+                        var max = 10,
+                            min = -10;
+                        //radius += (Math.floor(variance * (max - min + 1)) + min);
+                        var pX = radius * Math.sin(random * (2 * Math.PI)),
+                            pY = radius * Math.cos(random * (2 * Math.PI)),
+                            pZ = 1;
+                        var particle = new THREE.Vector3(
+                                            pX,pY,pZ
+                                        );
+                        particle.velocity = new THREE.Vector3(
+                                                0,
+                                                -Math.random(),
+                                                0
+                                            );
+                        // Add the particle to the geometry
+                        particles.vertices.push(particle);
+                        }
+                        // Create the particle system
+                        particleSystemE = new THREE.Points(
+                                                particles,particle_Material
+                                            );
+                        particleSystemE.sortParticles = true;
+                        particleSystemE.name = "PartyCules";
+                        // Add the particle system to the scene
+                        scene.add(particleSystemE);
+                        var radius = 2,
+                        segments = 64,
+                        material = new THREE.LineBasicMaterial( { color: 0x000000 } ),
+                        geometry = new THREE.CircleGeometry( radius, segments );
+                        // Remove center vertex
+                        geometry.vertices.shift();
+                        circleE = new THREE.Line( geometry, material );
+                        circleE.position.z = 1;
+                        circleE.name = "Enemy";
+                        scene.add( circleE );
+                        loader.load('scr/medias/models/godzilla.json', function addModelToScene( geometry, materials) {
+                            var material = new THREE.MeshFaceMaterial(materials);
+                            helicoE1 = new THREE.Mesh( geometry, material );
+                            helicoE1.name = "godzilla";
+                            helicoE1.scale.set(1.5,1.5,1.5);
+                            helicoE1.rotation.x = Math.PI/2;
+                            helicoE1.rotation.y = -Math.PI/2;
+                            helicoE1.position.set(0,0,-1);
+                            helicoE.add(helicoE1);
+                        });
+                        helicoE.position.set(0,18,0);
+                        if (lowquality == "false") {
+                            scene.add(helicoE);
+                        }
+                    }, 6000);
+                    changementNiveau = false;
+                }
+                if (niveau == 3 && changementNiveau == true) {
+                    niveau = "fin";
+                    document.getElementById('messageLancement').innerHTML = 'Bravo Soldat';
+                    scene.remove(helicoE);
+                    helicoE.remove(helicoE1);
+                    scene.remove(circleE);
+                    scene.remove(particleSystemE);
+                    scene.remove(Ball);
+                    Ball.material.opacity = 0;
+                    outlineMesh1.material.opacity = 0;
+                    outlineMesh2.material.opacity = 0;
+                    outlineMesh3.material.opacity = 0;
+                    outlineMesh4.material.opacity = 0;
+                    outlineMesh5.material.opacity = 0;
+                    BallMovX = 0;
+                    BallMovY = 0;
+                    directionY = 1;
+                    coeffVitBall = 1;
+                    scoreJoueur = 0;
+                    scoreEnnemi = 0;
+                    Ball.position.set(-11.5, 0, 1);
+                    launch = 0;
+                    changementNiveau = false;
+                    var spriteMap = new THREE.TextureLoader().load("scr/medias/images/white-flag.png");
+                    var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
+                    drapeauSprite = new THREE.Sprite( spriteMaterial );
+                    drapeauSprite.position.set(0,25,-7);
+                    drapeauSprite.scale.set(10,10,10)
+                    scene.add(drapeauSprite);
+                    setTimeout(function(){
+                        window.location.replace('src/html/classic-afterEnd.html');
+                    }, 10000);
+                }
+                if (typeof drapeauSprite != "undefined") {
+                        drapeauSprite.position.z = drapeauSprite.position.z + 0.015;
+                }
+// Changement de la qualite du jeu
+                if (lowquality == "true" && changequality == true) {
+                    scene.add(options);
+                    scene.add(bateauxE);
+                    scene.add(paperBoatScore);
+                    barresBut.position.z -= 0.1;
+                    boueesAlt.position.z -= 0.1;
+                    helicoE.position.x = ennemiSprite.position.x;
+                    helicoE.position.y = ennemiSprite.position.y;
+                    scene.add(helicoE);
+                    pirateSprite.position.x += -1000;
+                    ennemiSprite.position.x += -1000;
+                    paperBoatScoreLow.position.x += -1000;
+                    changequality = false;
+                    lowquality = "false";
+                }
+                if (lowquality == "false" && changequality == true){
+                    scene.remove(options);
+                    scene.remove(bateauxE);
+                    scene.remove(paperBoatScore);
+                    barresBut.position.z += 0.1;
+                    boueesAlt.position.z += 0.1;
+                    ennemiSprite.position.x = helicoE.position.x;
+                    ennemiSprite.position.y = helicoE.position.y;
+                    ennemiSprite.position.z = helicoE.position.z + 2;
+                    scene.remove(helicoE);
+                    pirateSprite.position.x += 1000;
+                    scene.add(paperBoatScoreLow);
+                    paperBoatScoreLow.position.x += 1000;
+                    changequality = false;
+                    lowquality = "true";
+                }
+                if (lowquality == "true") {
+                    if (vueAerienne == true) {
+                        pirateSprite.position.y = 0;
+                        unSprite.scale.set(2.8,2.8,2.8);
+                        deuxSprite.scale.set(2.8,2.8,2.8);
+                        unSpriteE.position.y = 15;
+                        deuxSpriteE.position.y = 15;
+                    }
+                    else {
+                        pirateSprite.position.y = -1;
+                        unSprite.scale.set(1.5,1.5,1.5);
+                        deuxSprite.scale.set(1.5,1.5,1.5);
+                        unSpriteE.position.y = 13;
+                        deuxSpriteE.position.y = 13;
+                    }
+                }
+                if (bouees == "false" && changeBouees == true) {
+                    scene.add(bouees1);
+                    scene.add(bouees2);
+                    scene.add(bouees3);
+                    scene.add(bouees4);
+                    changeBouees = false;
+                    bouees = "true";
+                    scene.remove(boueesAlt);
+                }
+                if (bouees == "true" && changeBouees == true) {
+                    scene.remove(bouees1);
+                    scene.remove(bouees2);
+                    scene.remove(bouees3);
+                    scene.remove(bouees4);
+                    changeBouees = false;
+                    bouees = "false";
+                    scene.add(boueesAlt);
+                }
+// Gestion rendu mer
+                ms_Water.render();
+                ms_Water.material.uniforms.time.value += 1.0 / 300;
+                
+                var thisLoop = new Date;
+                fps = 1000 / (thisLoop - lastLoop);
+                lastLoop = thisLoop;
+                setTimeout(function(){
+                    if (fps > 50 &&  document.getElementById('intro').innerHTML !== '') {
+                        document.getElementById('lancerNavalPong').removeAttribute("disabled");
+                        document.getElementById('lancerClassicPong').removeAttribute("disabled");
+                    }
+                }, 2000);
+            }// fin render
+            function onDocumentMouseMove( event ) 
+            {
+                MouseX = event.clientX;
+                MouseY = event.clientY;
+            }
+            // Deplacements
+            window.addEventListener("keydown", checkKeyPressed, false);
+            function checkKeyPressed(e) {
+                if (e.keyCode == "90") { // Z
+                    haut = "true";
+                }
+                if (e.keyCode == "83") { // S
+                    bas = "true";
+                }
+                if (e.keyCode == "81") { // Q
+                    gauche = "true";
+                }
+                if (e.keyCode == "68") { // D
+                    droite = "true";
+                }
+            }
+            ;
+            window.addEventListener("keyup", checkKeyReleased, false);
+            function checkKeyReleased(e) {
+                if (e.keyCode == "90") { // Z
+                    haut = "nul";
+                }
+                if (e.keyCode == "83") { // S
+                    bas = "nul";
+                }
+                if (e.keyCode == "81") { // Q
+                    gauche = "nul";
+                }
+                if (e.keyCode == "68") { // D
+                    droite = "nul";
+                }
+                if (e.keyCode == "76") { // L
+                    run = 1;
+                    document.getElementById('messageLancement').innerHTML = '';
+                }
+                if (e.keyCode == "80") { // P
+                    window.open( renderer.domElement.toDataURL("image/png"), "Final");
+                }
+                if (e.keyCode == "70") { // F
+                    if (pleinEcran) {THREEx.FullScreen.cancel(); pleinEcran = false;}
+                    else {THREEx.FullScreen.request(); pleinEcran = true;}
+                }
+                if (e.keyCode == "89") { // Y
+                    changequality = true;
+                }
+                if (e.keyCode == "85") { // U
+                    changeBouees = true;
+                }
+                if (e.keyCode == "17") { // CTRL
+                    if (inertie == true) {inertie = false}
+                    else {inertie = true};
+                }
+                
+                if (e.keyCode == "96" || e.keyCode == "48") { // 0 
+                    camera.position.x = 0;
+                    camera.position.y = -36;
+                    camera.position.z = 15;
+                    camera.rotation.x = 1.05;
+                    camera.rotation.y = 0;
+                    camera.rotation.z = 0;
+                    camHelico = false;
+                    camMouette = false;
+                    vueAerienne = false;
+                }
+                if (e.keyCode == "97" || e.keyCode == "49") { // 1
+                    if (vueAerienne == true) {
+                        vueAerienne = false;
+                        camera.position.x = 0;
+                        camera.position.y = -36;
+                        camera.position.z = 15;
+                        camera.rotation.x = 1.05;
+                        camera.rotation.y = 0;
+                        camera.rotation.z = 0;}
+                    else {camHelico = false; camMouette = false; vueAerienne = true};
+                }
+                if (e.keyCode == "98" || e.keyCode == "50") { // 2
+                    if (camHelico == true) {
+                        camHelico = false;
+                        camera.position.x = 0;
+                        camera.position.y = -36;
+                        camera.position.z = 15;
+                        camera.rotation.x = 1.05;
+                        camera.rotation.y = 0;
+                        camera.rotation.z = 0;
+                    }
+                    else {camMouette = false; camHelico = true; vueAerienne = false};
+                }
+                if (e.keyCode == "99" || e.keyCode == "51") { // 3
+                    if (camMouette == true) {
+                        camMouette = false;
+                        camera.position.x = 0;
+                        camera.position.y = -36;
+                        camera.position.z = 15;
+                        camera.rotation.x = 1.05;
+                        camera.rotation.y = 0;
+                        camera.rotation.z = 0;
+                    }
+                    else {camHelico = false; camMouette = true; vueAerienne = false};
+                }
+                if (e.keyCode == "77") { // M
+                    if (mute == false) {mute=true;Howler.mute();document.getElementById('mute').innerHTML = 'UnMute';}else {mute=false;Howler.unmute();document.getElementById('mute').innerHTML = 'Mute';}
+                }
+                if (e.keyCode == "75") { // K
+                    scene.remove(bateauxE);
+                    for (var i = bateauxE.children.length - 1; i >= 0; i--) {
+                        bateauxE.remove(bateauxE.children[i]);
+                    }
+                    contourE.position.x += 1000;
+                    contour_vE.position.x += 1000;
+                    contour_hE.position.x += 1000;
+                }
+                if (e.keyCode == "73") { // I
+                    if (invincible == true) {invincible = false}
+                    else {invincible = true};
+                }
+                if (e.keyCode == "72") { // H
+                    window.alert("Déplacez votre hélicoptère avec les touches zqsd :\n   - z : en avant\n   - q : à gauche\n   - s : en arrière\n   - d : à droite\nLe but est de toucher la balle (tirée du bateau pirate) avec le cercle situé sous votre hélicoptère.\n\nGagnez 3 manches pour passer au niveau suivant mais attention ! L'ennemi risque de vous surprendre plus d'une fois !\n\nLes touches à connaitre :\n   - control : changer l'inertie de votre hélicoptère (+mobile -puissant)\n   - 0,1,2,3 : changer de caméra\n   - y : changer la qualité graphique du jeu\n   - u : ajouter/supprimer de jolies bouées\n   - f : passer en plein écran\n   - p : faire une capture d'écran\n   - m : pour couper/remettre le son\n\nVous pouvez aussi tricher comme bon vous semble et utiliser :\n   - k : pour détruire les bateaux ennemis\n   - i : mode invincible");
+                }
+            }
+
           </script>
   </body>
 </html>
