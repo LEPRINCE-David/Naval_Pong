@@ -3280,6 +3280,240 @@
                     window.location.replace('classic.html');
                 }, 10000);
             }
+          
+            // Render
+            function render() {
+                houleZ += 0.01;
+                houleX += 0.015;
+                helico2.rotation.z += 0.2;
+                helicoE2.rotation.z += 0.1;
+                if (camHelico) {
+                    camera.position.x = helico.position.x;
+                    camera.position.y = helico.position.y - 3;
+                    camera.position.z = helico.position.z + 3;
+                    camera.rotation.x = 1.2;
+                    camera.rotation.y = 0;
+                    camera.rotation.z = 0;
+                }
+                if (camMouette) {
+                    camera.position.x = Seagull.position.x;
+                    camera.position.y = Seagull.position.y - 3;
+                    camera.position.z = Seagull.position.z + 1.5;
+                    camera.rotation.x = 1.2;
+                    camera.rotation.y = 0;
+                    camera.rotation.z = 0;
+                }
+                if (vueAerienne) {
+                    camera.position.x = 0;
+                    camera.position.y = 0;
+                    camera.position.z = 60;
+                    camera.rotation.x = 0;
+                    camera.rotation.y = 0;
+                    camera.rotation.z = 0;
+                }
+                if (run == 1 && launch == 0) {
+                    BallMovX = Math.random() / 20;
+                    if (BallMovX < 0.03) {BallMovX += 0.03};
+                    BallMovY = -0.05; // la balle part vers le joueur
+                    run = 0;
+                    launch = 0;
+                    arbreBonusTerrain = true;
+                    setTimeout(function(){
+                        Ball.material.opacity = 1;
+                        outlineMesh1.material.opacity = 1;
+                        outlineMesh2.material.opacity = 1;
+                        outlineMesh3.material.opacity = 1;
+                        outlineMesh4.material.opacity = 1;
+                        outlineMesh5.material.opacity = 1;
+                    }, 200);
+                }
+                outlineMesh1.position.x = Ball.position.x + BallMovX * directionX * -0.1;
+                outlineMesh1.position.y = Ball.position.y + BallMovY * directionY * -0.1;
+                outlineMesh1.position.z = Ball.position.z;
+                outlineMesh2.position.x = Ball.position.x + BallMovX * directionX * -0.2;
+                outlineMesh2.position.y = Ball.position.y + BallMovY * directionY * -0.2;
+                outlineMesh2.position.z = Ball.position.z;
+                outlineMesh3.position.x = Ball.position.x + BallMovX * directionX * -0.3;
+                outlineMesh3.position.y = Ball.position.y + BallMovY * directionY * -0.3;
+                outlineMesh3.position.z = Ball.position.z;
+                outlineMesh4.position.x = Ball.position.x + BallMovX * directionX * -0.4;
+                outlineMesh4.position.y = Ball.position.y + BallMovY * directionY * -0.4;
+                outlineMesh4.position.z = Ball.position.z;
+                outlineMesh5.position.x = Ball.position.x + BallMovX * directionX * -0.5;
+                outlineMesh5.position.y = Ball.position.y + BallMovY * directionY * -0.5;
+                outlineMesh5.position.z = Ball.position.z;
+                BallposX = Ball.position.x;
+                BallposY = Ball.position.y;
+                
+                particleSystemP.rotation.z += 0.1;
+                particleSystemP.position.x = helico.position.x;
+                particleSystemP.position.y = helico.position.y;
+                if (typeof particleSystemPJoker != "undefined") {
+                    particleSystemPJoker.rotation.z += 0.2;
+                    particleSystemPJoker.position.x = helico.position.x;
+                    particleSystemPJoker.position.y = helico.position.y;
+                }
+                particleSystemE.rotation.z += 0.1;
+                if (lowquality == "false") {
+                    particleSystemE.position.x = helicoE.position.x;
+                    particleSystemE.position.y = helicoE.position.y;
+                }
+                else {
+                    particleSystemE.position.x = ennemiSprite.position.x;
+                    particleSystemE.position.y = ennemiSprite.position.y;
+                }
+                circleP.position.x = helico.position.x;
+                circleP.position.y = helico.position.y;
+                if (typeof circlePJoker != "undefined" && arbreBonusTerrain == false && arbreBonus) {
+                    circlePJoker.position.x = helico.position.x;
+                    circlePJoker.position.y = helico.position.y;
+                }
+                else {
+                    circlePJoker.position.x = 1000;
+                    circlePJoker.position.y = 1000;
+                }
+                if (lowquality == "false") {
+                    circleE.position.x = helicoE.position.x;
+                    circleE.position.y = helicoE.position.y;
+                }
+                else {
+                    circleE.position.x = ennemiSprite.position.x;
+                    circleE.position.y = ennemiSprite.position.y;
+                }
+                if (Ball.position.y > 23) {
+                    if (postProcess == false) {
+                        var sound = new Howl({
+                          urls: ['scr/medias/sounds/explosion.mp3'],
+                          volume: 0.2
+                        }).play();
+                    }
+                    postProcess = true;
+                    scoreJoueur += 1;
+                    if (scoreJoueur < 3){
+                        changementManche = true;
+                        gagnant = "Joueur";
+                        ajoutPaperBoat();
+                    }
+                    else {
+                        changementNiveau = true;
+                        enleverPaperBoat();
+                    }
+                }
+                if (Ball.position.y < -23) {
+                    if (postProcess == false) {
+                        var sound = new Howl({
+                          urls: ['scr/medias/sounds/explosion.mp3'],
+                          volume: 0.2
+                        }).play();
+                    }
+                    postProcess = true;
+                    if (invincible == false) {
+                        scoreEnnemi += 1;
+                        if (scoreEnnemi < 3){
+                            changementManche = true;
+                            gagnant = "Ennemi";
+                            ajoutPaperBoatE();
+                        }
+                        else if (scoreEnnemi == 4) {
+                            gameOver();
+                            enleverPaperBoat();
+                        }
+                    }
+                    else {
+                        directionY = directionY * -1;
+                    }
+                }
+                if (Ball.position.x > -6) {launch=1;}
+                if (Ball.position.x > 8) {directionX = directionX * -1;}
+                if (Ball.position.x < -8 && launch==1) {directionX = directionX * -1;}
+                Ball.position.y += BallMovY * directionY * 2.5 * coeffVitBall;
+                Ball.position.x += BallMovX * directionX * 2.5 * coeffVitBall;
+                requestAnimationFrame(render);
+                //controls.update();
+                if (postProcess) {
+                    composer.render(new THREE.Scene(), new THREE.PerspectiveCamera());
+                    if (scoreEnnemi < 4 && scoreJoueur < 4) {
+                        setTimeout(function(){
+                            postProcess = false;
+                        }, (700));
+                    }
+                }
+                else {renderer.render(scene, camera);}
+                if (arbreBonusTerrain) {
+                    checkCollisionsPaddle(Ball, rays, [circleP, circleE]);
+                }
+                else {
+                    checkCollisionsPaddle(Ball, rays, [circlePJoker, circleE]);
+                }
+                checkCollisionsContour(Ball, rays, [contour_h, contour_v]);
+                if( typeof tree != "undefined" && typeof submarine != "undefined" ){checkCollisionsBonus(Ball, rays, [tree, submarine]);};
+                if (typeof submarine != "undefined") {
+                    if (((Ball.position.x > submarine.position.x - 1) && (Ball.position.x < submarine.position.x + 1)) && ((Ball.position.y > submarine.position.y - 1.5) && (Ball.position.y < submarine.position.y + 0.5)) && ((Ball.position.z > submarine.position.z - 3) && (Ball.position.z < submarine.position.z + 3))) {
+                        ssMarinBonusTerrain = false;
+                        ssMarinBonus = true;
+                        submarineJoker.position.z = -5;
+                        submarineJoker.position.x = (-5 + (Math.random()*10));
+                        scene.add(submarineJoker);
+                    }
+                }
+                if( typeof submarineJoker != "undefined" && ssMarinBonus){checkCollisionsBonus(Ball, rays, [submarineJoker]);};
+                aiguilleX = (Ball.position.x - circleP.position.x)/Distance(circleP, Ball);
+                aiguilleY = (Ball.position.y - circleP.position.y)/Distance(circleP, Ball);
+                aiguille.position.x = circleP.position.x + 0.35 * aiguilleX;
+                aiguille.position.y = circleP.position.y + 0.35 * aiguilleY;
+                aiguille.scale.y = 1;
+                if (Ball.position.x < helico.position.x) {aiguille.rotation.z = Math.acos(
+                    (-(Ball.position.x - circleP.position.x)*(Ball.position.x - circleP.position.x) + (Ball.position.y - circleP.position.y)*(Ball.position.y - circleP.position.y) + Distance(circleP, Ball)*Distance(circleP, Ball))
+                    / (2*(Ball.position.y - circleP.position.y)*Distance(circleP, Ball)));}
+                else {aiguille.rotation.z = -1 * Math.acos(
+                    (-(Ball.position.x - circleP.position.x)*(Ball.position.x - circleP.position.x) + (Ball.position.y - circleP.position.y)*(Ball.position.y - circleP.position.y) + Distance(circleP, Ball)*Distance(circleP, Ball))
+                    / (2*(Ball.position.y - circleP.position.y)*Distance(circleP, Ball)));}
+                if (Distance(circleP, Ball) > 0.7) {
+                    if ((Ball.position.x - circleP.position.x) > 0) {
+                        aiguille.position.x = circleP.position.x + 0.7 * aiguilleX * (1 - 1/(2*Distance(circleP, Ball)));
+                    }
+                    else {
+                        aiguille.position.x = circleP.position.x + 0.7 * aiguilleX * (1 - 1/(2*Distance(circleP, Ball)));
+                    }
+                    if ((Ball.position.y - circleP.position.y) > 0) {
+                        aiguille.position.y = circleP.position.y + 0.7 * aiguilleY * (1 - 1/(2*Distance(circleP, Ball)));
+                    }
+                    else {
+                        aiguille.position.y = circleP.position.y + 0.7 * aiguilleY * (1 - 1/(2*Distance(circleP, Ball)));
+                    }
+                    
+                    aiguille.scale.y = 1.5 * 0.7/(Distance(circleP, Ball));
+                }
+                if (toucheP == 1) {
+                    if (inertie) {
+                        if (cooldown == 1) {
+                            if (directionX == -1) {BallMovX = -(Ball.position.x - circleP.position.x) / 10;}
+                            if (directionX == 1) {BallMovX = (Ball.position.x - circleP.position.x) / 10;}
+                            if (directionY == 1) {BallMovY = -(Ball.position.y - circleP.position.y) / 10;}
+                            if (directionY == -1) {BallMovY = (Ball.position.y - circleP.position.y) / 10;}
+                            cooldown = 0;
+                        }
+                    }
+                    else {
+                        if (cooldown == 1) {
+                            if (directionX == -1) {BallMovX = -(Ball.position.x - circleP.position.x) / 13;}
+                            if (directionX == 1) {BallMovX = (Ball.position.x - circleP.position.x) / 13;}
+                            if (directionY == 1) {BallMovY = -(Ball.position.y - circleP.position.y) / 13;}
+                            if (directionY == -1) {BallMovY = (Ball.position.y - circleP.position.y) / 13;}
+                            cooldown = 0;
+                        }
+                    }
+                }
+                if (toucheE == 1) {
+                    if (cooldown == 1) {
+                        if (directionX == -1) {BallMovX = (-(Ball.position.x - circleE.position.x) / 13)*puissanceEnnemi;}
+                        if (directionX == 1) {BallMovX = ((Ball.position.x - circleE.position.x) / 13)*puissanceEnnemi;}
+                        if (directionY == 1) {BallMovY = -((Ball.position.y - circleE.position.y) / 13)*puissanceEnnemi;}
+                        if (directionY == -1) {BallMovY = ((Ball.position.y - circleE.position.y) / 13)*puissanceEnnemi;}
+                        cooldown = 0;
+                    }
+                }
+              
           </script>
   </body>
 </html>
