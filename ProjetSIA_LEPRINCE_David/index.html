@@ -1847,6 +1847,1439 @@
                 buffer: true
                 });
             }
+      
+            
+            // Ajout bateau ennemi
+            function addBateauE(taille, position1, position2, direction) {
+                var x, y;
+                switch(position1) {
+                    case "A" :
+                        y = 21;
+                        break;
+                    case "B" :
+                        y = 19;
+                        break;
+                    case "C" :
+                        y = 17;
+                        break;
+                    case "D" :
+                        y = 15;
+                        break;
+                    case "E" :
+                        y = 13;
+                        break;
+                    case "F" :
+                        y = 11;
+                        break;
+                    case "G" :
+                        y = 9;
+                        break;
+                    case "H" :
+                        y = 7;
+                        break;
+                }
+                switch(position2) {
+                    case 1 :
+                        x = -7;
+                        break;
+                    case 2 :
+                        x = -5;
+                        break;
+                    case 3 :
+                        x = -3;
+                        break;
+                    case 4 :
+                        x = -1;
+                        break;
+                    case 5 :
+                        x = 1;
+                        break;
+                    case 6 :
+                        x = 3;
+                        break;
+                    case 7 :
+                        x = 5;
+                        break;
+                    case 8 :
+                        x = 7;
+                        break;
+                }
+                switch(taille) {
+// Petit Bateau
+                    case 2 :
+                        switch(direction) {
+                            case "gauche" :
+                                x = x - (taille-1);
+                                Bateau2E = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0xaa0000 } );
+                                cube = new THREE.BoxGeometry(4.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+1, 0);
+                                barre.name = "Petit Bateau E G Y T"; // Ground sur l'axe X et Left
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y+1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);
+                                cube = new THREE.BoxGeometry(4.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-1, 0);
+                                barre.name = "Petit Bateau E G Y B";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y-1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-2, y, 0);
+                                barre.name = "Petit Bateau E G X L";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x-2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+2, y, 0);
+                                barre.name = "Petit Bateau E G X R";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                scene.add( contourE );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_vE );
+                                scene.add( contour_hE );
+                                loader.load('src/medias/models/ryanhaldy_swiftboat_model2.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau2E = new THREE.Mesh( geometry, material );
+                                    bateau2E.name = "Petit Bateau E";
+                                    bateau2E.scale.set(0.4,0.4,0.4);
+                                    bateau2E.rotation.x = Math.PI / 2;
+                                    bateau2E.position.set(x, y, 0.1);
+                                    Bateau2E.add (bateau2E);
+                                });
+                                bateauxE.add(Bateau2E);
+                                break;
+                            case "droite" :
+                                x = x + (taille-1);
+                                Bateau2E = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0xaa0000 } );
+                                cube = new THREE.BoxGeometry(4.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+1, 0);
+                                barre.name = "Petit Bateau E G Y T"; // Ground sur l'axe X et Left
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y+1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);
+                                cube = new THREE.BoxGeometry(4.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-1, 0);
+                                barre.name = "Petit Bateau E G Y B";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y-1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-2, y, 0);
+                                barre.name = "Petit Bateau E G X L";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x-2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+2, y, 0);
+                                barre.name = "Petit Bateau E G X R";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/ryanhaldy_swiftboat_model2.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau2E = new THREE.Mesh( geometry, material );
+                                    bateau2E.name = "Petit Bateau E";
+                                    bateau2E.scale.set(0.4,0.4,0.4);
+                                    bateau2E.rotation.x = Math.PI / 2;
+                                    bateau2E.position.set(x, y, 0.1);
+                                    bateau2E.rotation.y = Math.PI;
+                                    Bateau2E.add (bateau2E);
+                                });
+                                bateauxE.add(Bateau2E);
+                                break;
+                            case "haut" :
+                                y = y + (taille-1);
+                                Bateau2E = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0xaa0000 } );
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+2, 0);
+                                barre.name = "Petit Bateau E G Y T"; // Ground sur l'axe X et Left
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y+2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-2, 0);
+                                barre.name = "Petit Bateau E G Y B";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y-2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 4.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-1, y, 0);
+                                barre.name = "Petit Bateau E G X L";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x-1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 4.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+1, y, 0);
+                                barre.name = "Petit Bateau E G X R";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/ryanhaldy_swiftboat_model2.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau2E = new THREE.Mesh( geometry, material );
+                                    bateau2E.name = "Petit Bateau E";
+                                    bateau2E.scale.set(0.4,0.4,0.4);
+                                    bateau2E.rotation.x = Math.PI / 2;
+                                    bateau2E.position.set(x, y, 0.1);
+                                    bateau2E.rotation.y = - Math.PI / 2;
+                                    Bateau2E.add (bateau2E);
+                                });
+                                bateauxE.add(Bateau2E);
+                                break;
+                            case "bas" :
+                                y = y - (taille-1);
+                                Bateau2E = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0xaa0000 } );
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+2, 0);
+                                barre.name = "Petit Bateau E G Y T"; // Ground sur l'axe X et Left
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y+2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-2, 0);
+                                barre.name = "Petit Bateau E G Y B";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y-2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 4.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-1, y, 0);
+                                barre.name = "Petit Bateau E G X L";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x-1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 4.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+1, y, 0);
+                                barre.name = "Petit Bateau E G X R";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau E L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/ryanhaldy_swiftboat_model2.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau2E = new THREE.Mesh( geometry, material );
+                                    bateau2E.name = "Petit Bateau E";
+                                    bateau2E.scale.set(0.4,0.4,0.4);
+                                    bateau2E.rotation.x = Math.PI / 2;
+                                    bateau2E.position.set(x, y, 0.1);
+                                    bateau2E.rotation.y = Math.PI / 2;
+                                    Bateau2E.add (bateau2E);
+                                });
+                                bateauxE.add(Bateau2E);
+                                break;
+                            };
+                            break;
+// Grand Bateau
+                    case 4 :
+                        switch(direction) {
+                            case "gauche" :
+                                x = x - (taille-1);
+                                Bateau4E = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0xaa0000 } );
+                                cube = new THREE.BoxGeometry(8.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+1, 0);
+                                barre.name = "Grand Bateau E G Y T"; // Ground sur l'axe X et Left
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y+1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);
+                                cube = new THREE.BoxGeometry(8.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-1, 0);
+                                barre.name = "Grand Bateau E G Y B";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y-1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-4, y, 0);
+                                barre.name = "Grand Bateau E G X L";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x-4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+4, y, 0);
+                                barre.name = "Grand Bateau E G X R";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/Missile_Cruiser2.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau4E = new THREE.Mesh( geometry, material );
+                                    bateau4E.name = "Grand Bateau E";
+                                    bateau4E.scale.set(0.1,0.1,0.1);
+                                    bateau4E.rotation.x = Math.PI / 2;
+                                    bateau4E.rotation.y = -Math.PI / 2;
+                                    bateau4E.position.set(x+1, y, -0.5);
+                                    Bateau4E.add (bateau4E);
+                                });
+                                bateauxE.add(Bateau4E);
+                                break;
+                            case "droite" :
+                                x = x + (taille-1);
+                                Bateau4E = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0xaa0000 } );
+                                cube = new THREE.BoxGeometry(8.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+1, 0);
+                                barre.name = "Grand Bateau E G Y T"; // Ground sur l'axe X et Left
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y+1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);
+                                cube = new THREE.BoxGeometry(8.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-1, 0);
+                                barre.name = "Grand Bateau E G Y B";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y-1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-4, y, 0);
+                                barre.name = "Grand Bateau E G X L";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x-4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+4, y, 0);
+                                barre.name = "Grand Bateau E G X R";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/Missile_Cruiser2.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau4E = new THREE.Mesh( geometry, material );
+                                    bateau4E.name = "Grand Bateau E";
+                                    bateau4E.scale.set(0.1,0.1,0.1);
+                                    bateau4E.rotation.x = Math.PI / 2;
+                                    bateau4E.rotation.y = Math.PI / 2;
+                                    bateau4E.position.set(x-1, y, -0.5);
+                                    Bateau4E.add (bateau4E);
+                                });
+                                bateauxE.add(Bateau4E);
+                                break;
+                            case "haut" :
+                                y = y + (taille-1);
+                                Bateau4E = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0xaa0000 } );
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+4, 0);
+                                barre.name = "Grand Bateau E G Y T"; // Ground sur l'axe X et Left
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y+4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-4, 0);
+                                barre.name = "Grand Bateau E G Y B";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y-4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 8.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-1, y, 0);
+                                barre.name = "Grand Bateau E G X L";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x-1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 8.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+1, y, 0);
+                                barre.name = "Grand Bateau E G X R";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/Missile_Cruiser2.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau4E = new THREE.Mesh( geometry, material );
+                                    bateau4E.name = "Grand Bateau E";
+                                    bateau4E.scale.set(0.1,0.1,0.1);
+                                    bateau4E.rotation.x = Math.PI / 2;
+                                    bateau4E.rotation.y = -2 * Math.PI / 2;
+                                    bateau4E.position.set(x, y-1, -0.5);
+                                    Bateau4E.add (bateau4E);
+                                });
+                                bateauxE.add(Bateau4E);
+                                break;
+                            case "bas" :
+                                y = y - (taille-1);
+                                Bateau4E = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0xaa0000 } );
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+4, 0);
+                                barre.name = "Grand Bateau E G Y T"; // Ground sur l'axe X et Left
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y+4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-4, 0);
+                                barre.name = "Grand Bateau E G Y B";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y-4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_vE.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 8.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-1, y, 0);
+                                barre.name = "Grand Bateau E G X L";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x-1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 8.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+1, y, 0);
+                                barre.name = "Grand Bateau E G X R";
+                                contourE.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau E L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_hE.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/Missile_Cruiser2.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau4E = new THREE.Mesh( geometry, material );
+                                    bateau4E.name = "Grand Bateau E";
+                                    bateau4E.scale.set(0.1,0.1,0.1);
+                                    bateau4E.rotation.x = Math.PI / 2;
+                                    bateau4E.position.set(x, y+1, -0.5);
+                                    Bateau4E.add (bateau4E);
+                                });
+                                bateauxE.add(Bateau4E);
+                                break;
+                            };
+                            break;
+                }
+            }
+// Ajout bateau joueur
+            function addBateau(taille, position1, position2, direction) {
+                var x, y;
+                switch(position1) {
+                    case "A" :
+                        y = -7;
+                        break;
+                    case "B" :
+                        y = -9;
+                        break;
+                    case "C" :
+                        y = -11;
+                        break;
+                    case "D" :
+                        y = -13;
+                        break;
+                    case "E" :
+                        y = -15;
+                        break;
+                    case "F" :
+                        y = -17;
+                        break;
+                    case "G" :
+                        y = -19;
+                        break;
+                    case "H" :
+                        y = -21;
+                        break;
+                }
+                switch(position2) {
+                    case 1 :
+                        x = -7;
+                        break;
+                    case 2 :
+                        x = -5;
+                        break;
+                    case 3 :
+                        x = -3;
+                        break;
+                    case 4 :
+                        x = -1;
+                        break;
+                    case 5 :
+                        x = 1;
+                        break;
+                    case 6 :
+                        x = 3;
+                        break;
+                    case 7 :
+                        x = 5;
+                        break;
+                    case 8 :
+                        x = 7;
+                        break;
+                }
+                switch(taille) {
+// Petit Bateau
+                    case 2 :
+                        switch(direction) {
+                            case "gauche" :
+                                x = x - (taille-1);
+                                Bateau2 = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0x0000aa } );
+                                cube = new THREE.BoxGeometry(4.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+1, 0);
+                                barre.name = "Petit Bateau G Y T"; // Ground sur l'axe X et Left
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y+1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);
+                                cube = new THREE.BoxGeometry(4.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-1, 0);
+                                barre.name = "Petit Bateau G Y B";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y-1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-2, y, 0);
+                                barre.name = "Petit Bateau G X L";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x-2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+2, y, 0);
+                                barre.name = "Petit Bateau G X R";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('./src/medias/models/ryanhaldy_swiftboat_model.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau2 = new THREE.Mesh( geometry, material );
+                                    bateau2.name = "Petit Bateau";
+                                    bateau2.scale.set(0.4,0.4,0.4);
+                                    bateau2.rotation.x = Math.PI / 2;
+                                    bateau2.position.set(x, y, 0.1);
+                                    Bateau2.add (bateau2);
+                                });
+                                options.add(Bateau2);
+                                //scene.add(options);
+                                break;
+                            case "droite" :
+                                x = x + (taille-1);
+                                Bateau2 = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0x0000aa } );
+                                cube = new THREE.BoxGeometry(4.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+1, 0);
+                                barre.name = "Petit Bateau G Y T"; // Ground sur l'axe X et Left
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y+1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);
+                                cube = new THREE.BoxGeometry(4.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-1, 0);
+                                barre.name = "Petit Bateau G Y B";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y-1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-2, y, 0);
+                                barre.name = "Petit Bateau G X L";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x-2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+2, y, 0);
+                                barre.name = "Petit Bateau G X R";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+2, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+2, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('./src/medias/models/ryanhaldy_swiftboat_model.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau2 = new THREE.Mesh( geometry, material );
+                                    bateau2.name = "Petit Bateau";
+                                    bateau2.scale.set(0.4,0.4,0.4);
+                                    bateau2.rotation.x = Math.PI / 2;
+                                    bateau2.position.set(x, y, 0.1);
+                                    bateau2.rotation.y = Math.PI;
+                                    Bateau2.add (bateau2);
+                                });
+                                options.add(Bateau2);
+                                //scene.add(options);
+                                break;
+                            case "haut" :
+                                y = y + (taille-1);
+                                Bateau2 = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0x0000aa } );
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+2, 0);
+                                barre.name = "Petit Bateau G Y T"; // Ground sur l'axe X et Left
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y+2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-2, 0);
+                                barre.name = "Petit Bateau G Y B";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y-2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 4.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-1, y, 0);
+                                barre.name = "Petit Bateau G X L";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x-1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 4.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+1, y, 0);
+                                barre.name = "Petit Bateau G X R";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('./src/medias/models/ryanhaldy_swiftboat_model.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau2 = new THREE.Mesh( geometry, material );
+                                    bateau2.name = "Petit Bateau";
+                                    bateau2.scale.set(0.4,0.4,0.4);
+                                    bateau2.rotation.x = Math.PI / 2;
+                                    bateau2.position.set(x, y, 0.1);
+                                    bateau2.rotation.y = - Math.PI / 2;
+                                    Bateau2.add (bateau2);
+                                });
+                                options.add(Bateau2);
+                                //scene.add(options);
+                                break;
+                            case "bas" :
+                                y = y - (taille-1);
+                                Bateau2 = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0x0000aa } );
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+2, 0);
+                                barre.name = "Petit Bateau G Y T"; // Ground sur l'axe X et Left
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y+2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-2, 0);
+                                barre.name = "Petit Bateau G Y B";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y-2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 4.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-1, y, 0);
+                                barre.name = "Petit Bateau G X L";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x-1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 4.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+1, y, 0);
+                                barre.name = "Petit Bateau G X R";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+1, y+2, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-2, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Petit Bateau L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('./src/medias/models/ryanhaldy_swiftboat_model.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau2 = new THREE.Mesh( geometry, material );
+                                    bateau2.name = "Petit Bateau";
+                                    bateau2.scale.set(0.4,0.4,0.4);
+                                    bateau2.rotation.x = Math.PI / 2;
+                                    bateau2.position.set(x, y, 0.1);
+                                    bateau2.rotation.y = Math.PI / 2;
+                                    Bateau2.add (bateau2);
+                                });
+                                options.add(Bateau2);
+                                //scene.add(options);
+                                break;
+                            };
+                            break;
+// Grand Bateau
+                    case 4 :
+                        switch(direction) {
+                            case "gauche" :
+                                x = x - (taille-1);
+                                Bateau4 = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0x0000aa } );
+                                cube = new THREE.BoxGeometry(8.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+1, 0);
+                                barre.name = "Grand Bateau G Y T"; // Ground sur l'axe X et Left
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y+1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);
+                                cube = new THREE.BoxGeometry(8.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-1, 0);
+                                barre.name = "Grand Bateau G Y B";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y-1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-4, y, 0);
+                                barre.name = "Grand Bateau G X L";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x-4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+4, y, 0);
+                                barre.name = "Grand Bateau G X R";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/Missile_Cruiser.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau4 = new THREE.Mesh( geometry, material );
+                                    bateau4.name = "Grand Bateau";
+                                    bateau4.scale.set(0.1,0.1,0.1);
+                                    bateau4.rotation.x = Math.PI / 2;
+                                    bateau4.rotation.y = -Math.PI / 2;
+                                    bateau4.position.set(x+1, y, -0.5);
+                                    Bateau4.add (bateau4);
+                                });
+                                options.add(Bateau4);
+                                //scene.add(options);
+                                break;
+                            case "droite" :
+                                x = x + (taille-1);
+                                Bateau4 = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0x0000aa } );
+                                cube = new THREE.BoxGeometry(8.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+1, 0);
+                                barre.name = "Grand Bateau G Y T"; // Ground sur l'axe X et Left
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y+1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);
+                                cube = new THREE.BoxGeometry(8.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-1, 0);
+                                barre.name = "Grand Bateau G Y B";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y-1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-4, y, 0);
+                                barre.name = "Grand Bateau G X L";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x-4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 2.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+4, y, 0);
+                                barre.name = "Grand Bateau G X R";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+4, y+1, 1));
+                                line.vertices.push(new THREE.Vector3(x+4, y-1, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/Missile_Cruiser.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau4 = new THREE.Mesh( geometry, material );
+                                    bateau4.name = "Grand Bateau";
+                                    bateau4.scale.set(0.1,0.1,0.1);
+                                    bateau4.rotation.x = Math.PI / 2;
+                                    bateau4.rotation.y = Math.PI / 2;
+                                    bateau4.position.set(x-1, y, -0.5);
+                                    Bateau4.add (bateau4);
+                                });
+                                options.add(Bateau4);
+                                //scene.add(options);
+                                break;
+                            case "haut" :
+                                y = y + (taille-1);
+                                Bateau4 = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0x0000aa } );
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+4, 0);
+                                barre.name = "Grand Bateau G Y T"; // Ground sur l'axe X et Left
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y+4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-4, 0);
+                                barre.name = "Grand Bateau G Y B";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y-4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 8.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-1, y, 0);
+                                barre.name = "Grand Bateau G X L";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x-1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 8.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+1, y, 0);
+                                barre.name = "Grand Bateau G X R";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/Missile_Cruiser.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau4 = new THREE.Mesh( geometry, material );
+                                    bateau4.name = "Grand Bateau";
+                                    bateau4.scale.set(0.1,0.1,0.1);
+                                    bateau4.rotation.x = Math.PI / 2;
+                                    bateau4.rotation.y = -2 * Math.PI / 2;
+                                    bateau4.position.set(x, y-1, -0.5);
+                                    Bateau4.add (bateau4);
+                                });
+                                options.add(Bateau4);
+                                //scene.add(options);
+                                break;
+                            case "bas" :
+                                y = y - (taille-1);
+                                Bateau4 = new THREE.Object3D();
+                                material = new THREE.LineBasicMaterial({color: 0x000000});
+                                var outlineMaterial6 = new THREE.MeshBasicMaterial( { color: 0x0000aa } );
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y+4, 0);
+                                barre.name = "Grand Bateau G Y T"; // Ground sur l'axe X et Left
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y+4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L Y T"; // Ligne sur l'axe X et Left
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);
+                                cube = new THREE.BoxGeometry(2.1, 0.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x, y-4, 0);
+                                barre.name = "Grand Bateau G Y B";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y-4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L Y B";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_v.add(barre);              
+                                cube = new THREE.BoxGeometry(0.1, 8.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x-1, y, 0);
+                                barre.name = "Grand Bateau G X L";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x-1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x-1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L X L";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                cube = new THREE.BoxGeometry(0.1, 8.1, 0.01);
+                                var barre = new THREE.Mesh( cube, outlineMaterial6 );
+                                barre.position.set(x+1, y, 0);
+                                barre.name = "Grand Bateau G X R";
+                                contour.add(barre);
+                                line = new THREE.Geometry();
+                                line.vertices.push(new THREE.Vector3(x+1, y+4, 1));
+                                line.vertices.push(new THREE.Vector3(x+1, y-4, 1));
+                                barre = new THREE.Line(line, material);
+                                barre.name = "Grand Bateau L X R";
+                                /*barre.material.transparent = true;
+                                barre.material.opacity = 0;*/
+                                contour_h.add(barre);
+                                scene.add( contour );
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                barre.material.transparent = true;
+                                barre.material.opacity = 0;
+                                scene.add( contour_v );
+                                scene.add( contour_h );
+                                loader.load('src/medias/models/Missile_Cruiser.json', function addModelToScene( geometry, materials) {
+                                    var material = new THREE.MeshFaceMaterial(materials);
+                                    bateau4 = new THREE.Mesh( geometry, material );
+                                    bateau4.name = "Grand Bateau";
+                                    bateau4.scale.set(0.1,0.1,0.1);
+                                    bateau4.rotation.x = Math.PI / 2;
+                                    bateau4.position.set(x, y+1, -0.5);
+                                    Bateau4.add (bateau4);
+                                });
+                                options.add(Bateau4);
+                                //scene.add(options);
+                                break;
+                            };
+                            break;
+                }
+            }
+            function ajoutPaperBoat() {
+                loader.load('scr/medias/models/paper_boat.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    paperboat = new THREE.Mesh( geometry, material );
+                    paperboat.name = "Bateau Score";
+                    paperboat.scale.set(0.7, 0.7, 0.7);
+                    paperboat.rotation.x = Math.PI / 2;
+                    paperboat.rotation.y = Math.PI / 2;
+                    paperboat.position.set((10+5*scoreJoueur), -15, 0);
+                    paperBoatScore.add(paperboat);
+                    if (scoreJoueur == 1) {
+                        paperBoatScoreLow.add(unSprite);
+                        unSprite.scale.set(1.5,1.5,1.5);
+                        unSprite.position.set(12,-15,2);
+                    }
+                    else {
+                        paperBoatScoreLow.add(deuxSprite);
+                        deuxSprite.scale.set(1.5,1.5,1.5);
+                        deuxSprite.position.set(15,-15,2);
+                    }
+                    if (lowquality == "false") {
+                        scene.add(paperBoatScore);
+                    }
+                    else {
+                        scene.add(paperBoatScoreLow);
+                    }
+                });
+            }
+            function ajoutPaperBoatE() {
+                loader.load('scr/medias/models/paper_boatE.json', function addModelToScene( geometry, materials) {
+                    var material = new THREE.MeshFaceMaterial(materials);
+                    paperboat = new THREE.Mesh( geometry, material );
+                    paperboat.name = "Bateau Score";
+                    paperboat.scale.set(0.7, 0.7, 0.7);
+                    paperboat.rotation.x = Math.PI / 2;
+                    paperboat.rotation.y = Math.PI / 2;
+                    paperboat.position.set((10+5*scoreEnnemi), 15, 0);
+                    paperBoatScore.add(paperboat);
+                    if (scoreEnnemi == 1) {
+                        paperBoatScoreLow.add(unSpriteE);
+                        unSpriteE.scale.set(2.8,2.8,2.8);
+                        unSpriteE.position.set(12,13,2);
+                    }
+                    else {
+                        paperBoatScoreLow.add(deuxSpriteE);
+                        deuxSpriteE.scale.set(2.8,2.8,2.8);
+                        deuxSpriteE.position.set(15,13,2);
+                    }
+                    if (lowquality == "false") {
+                        scene.add(paperBoatScore);
+                    }
+                    else {
+                        scene.add(paperBoatScoreLow);
+                    }
+                });
+            }
+            function enleverPaperBoat() {
+                scene.remove(paperBoatScore);
+                for (var i = paperBoatScore.children.length - 1; i >= 0; i--) {
+                    paperBoatScore.remove(paperBoatScore.children[i]);
+                }
+                scene.remove(paperBoatScoreLow);
+                for (var i = paperBoatScoreLow.children.length - 1; i >= 0; i--) {
+                    paperBoatScoreLow.remove(paperBoatScoreLow.children[i]);
+                }
+            }
+            function gameOver() {
+                var sound = new Howl({
+                      urls: ['scr/medias/sounds/game_over.mp3']
+                    }).play();
+                document.getElementById('defaite').innerHTML = "Vous avez perdu !";
+                setTimeout(function(){
+                    window.location.replace('classic.html');
+                }, 10000);
+            }
           </script>
   </body>
 </html>
