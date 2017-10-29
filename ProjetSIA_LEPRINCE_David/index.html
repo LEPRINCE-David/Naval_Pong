@@ -3206,7 +3206,7 @@
                 }
             }
             function ajoutPaperBoat() {
-                loader.load('scr/medias/models/paper_boat.json', function addModelToScene( geometry, materials) {
+                loader.load('src/medias/models/paper_boat.json', function addModelToScene( geometry, materials) {
                     var material = new THREE.MeshFaceMaterial(materials);
                     paperboat = new THREE.Mesh( geometry, material );
                     paperboat.name = "Bateau Score";
@@ -3234,7 +3234,7 @@
                 });
             }
             function ajoutPaperBoatE() {
-                loader.load('scr/medias/models/paper_boatE.json', function addModelToScene( geometry, materials) {
+                loader.load('src/medias/models/paper_boatE.json', function addModelToScene( geometry, materials) {
                     var material = new THREE.MeshFaceMaterial(materials);
                     paperboat = new THREE.Mesh( geometry, material );
                     paperboat.name = "Bateau Score";
@@ -3273,11 +3273,11 @@
             }
             function gameOver() {
                 var sound = new Howl({
-                      urls: ['scr/medias/sounds/game_over.mp3']
+                      urls: ['src/medias/sounds/game_over.mp3']
                     }).play();
                 document.getElementById('defaite').innerHTML = "Vous avez perdu !";
                 setTimeout(function(){
-                    window.location.replace('classic.html');
+                    window.location.replace('src/html/classic.html');
                 }, 10000);
             }
           
@@ -3383,7 +3383,7 @@
                 if (Ball.position.y > 23) {
                     if (postProcess == false) {
                         var sound = new Howl({
-                          urls: ['scr/medias/sounds/explosion.mp3'],
+                          urls: ['src/medias/sounds/explosion.mp3'],
                           volume: 0.2
                         }).play();
                     }
@@ -3402,7 +3402,7 @@
                 if (Ball.position.y < -23) {
                     if (postProcess == false) {
                         var sound = new Howl({
-                          urls: ['scr/medias/sounds/explosion.mp3'],
+                          urls: ['src/medias/sounds/explosion.mp3'],
                           volume: 0.2
                         }).play();
                     }
@@ -3912,7 +3912,7 @@
                             circleE.name = "Enemy";
                             scene.add( circleE );
                         }, 2200);
-                        loader.load('scr/medias/models/superman.json', function addModelToScene( geometry, materials) {
+                        loader.load('src/medias/models/superman.json', function addModelToScene( geometry, materials) {
                         var material = new THREE.MeshFaceMaterial(materials);
                         helicoE1 = new THREE.Mesh( geometry, material );
                         helicoE1.name = "superman";
@@ -4020,7 +4020,7 @@
                         circleE.position.z = 1;
                         circleE.name = "Enemy";
                         scene.add( circleE );
-                        loader.load('scr/medias/models/godzilla.json', function addModelToScene( geometry, materials) {
+                        loader.load('src/medias/models/godzilla.json', function addModelToScene( geometry, materials) {
                             var material = new THREE.MeshFaceMaterial(materials);
                             helicoE1 = new THREE.Mesh( geometry, material );
                             helicoE1.name = "godzilla";
@@ -4060,7 +4060,7 @@
                     Ball.position.set(-11.5, 0, 1);
                     launch = 0;
                     changementNiveau = false;
-                    var spriteMap = new THREE.TextureLoader().load("scr/medias/images/white-flag.png");
+                    var spriteMap = new THREE.TextureLoader().load("src/medias/images/white-flag.png");
                     var spriteMaterial = new THREE.SpriteMaterial( { map: spriteMap, color: 0xffffff } );
                     drapeauSprite = new THREE.Sprite( spriteMaterial );
                     drapeauSprite.position.set(0,25,-7);
